@@ -16,7 +16,15 @@ CHANGE_PASSWORD_URL = "https://kk.keyman24.ru/change-password"
 
 
 class UserManager(_UserManager):
-    def create_user(self, username, email=None, password=None, **extra_fields):
+
+    def _create_user(self, username=None, email=None, password=None, **extra_fields):
+        email = self.normalize_email(email)
+        user = self.model(username=username, email=email, **extra_fields)
+        user.password = make_password(password)
+        user.save()
+        return user
+
+    def create_user(self, username=None, email=None, password=None, **extra_fields):
         if not password:
             password = generate_password()
         user: User = super().create_user(username, email, password, **extra_fields)
