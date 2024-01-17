@@ -29,14 +29,10 @@ class ChangePasswordSerializer(serializers.Serializer):
                 self.error_messages["no_active_account"],
                 "no_active_account",
             )
-
+        self.user.send_reset_password()
         return {
             'message': _('Send message to email success')
         }
-    
-    def create(self, validated_data):
-        self.user.send_reset_password()
-        return validated_data
 
 
 class ChangePasswordVerifySerializer(serializers.Serializer):
@@ -51,6 +47,7 @@ class ChangePasswordVerifySerializer(serializers.Serializer):
         return {
             'message': _('UUID verified')
         }
+
 
 class ChangePasswordPerformSerializer(serializers.Serializer):
     def __init__(self, *args, **kwargs):
