@@ -25,12 +25,21 @@ class UserManager(_UserManager):
         return user
 
     def create_superuser(self, email=None, password=None, **extra_fields):
-        return super().create_superuser(email, password, **extra_fields)
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+
+        if extra_fields.get("is_staff") is not True:
+            raise ValueError("Superuser must have is_staff=True.")
+        if extra_fields.get("is_superuser") is not True:
+            raise ValueError("Superuser must have is_superuser=True.")
+        return self._create_user(email, password, **extra_fields)
 
     def create_user(self, email=None, password=None, **extra_fields):
         if not password:
             password = generate_password()
-        user: User = super().create_user(email, password, **extra_fields)
+        extra_fields.setdefault("is_staff", False)
+        extra_fields.setdefault("is_superuser", False)
+        user: User = self._create_user(email, password, **extra_fields)
         user.send_password(password)
         return user
 
