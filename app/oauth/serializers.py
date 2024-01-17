@@ -18,7 +18,7 @@ class ChangePasswordSerializer(serializers.Serializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.fields[self.username_field] = serializers.PrimaryKeyRelatedField(pk_field=self.username_field, queryset=User.objects.filter(is_active=True), write_only=True)
+        self.fields[self.username_field] = serializers.SlugRelatedField(slug_field=self.username_field, queryset=User.objects.filter(is_active=True), write_only=True)
         self.fields['message'] = serializers.CharField(read_only=True)
 
 
@@ -42,7 +42,7 @@ class ChangePasswordSerializer(serializers.Serializer):
 class ChangePasswordVerifySerializer(serializers.Serializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['uuid'] = serializers.PrimaryKeyRelatedField(pk_field='uuid', queryset=ChangePasswordUUID.objects.all(), write_only=True)
+        self.fields['uuid'] = serializers.SlugRelatedField(slug_field='uuid', queryset=ChangePasswordUUID.objects.all(), write_only=True)
         self.fields['message'] = serializers.CharField(read_only=True)
 
     def validate(self, attrs):
@@ -55,7 +55,7 @@ class ChangePasswordVerifySerializer(serializers.Serializer):
 class ChangePasswordPerformSerializer(serializers.Serializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['uuid'] = serializers.PrimaryKeyRelatedField(pk_field='uuid', queryset=ChangePasswordUUID.objects.all(), write_only=True)
+        self.fields['uuid'] = serializers.SlugRelatedField(slug_field='uuid', queryset=ChangePasswordUUID.objects.all(), write_only=True)
         self.fields['password1'] = serializers.CharField(write_only=True)
         self.fields['password2'] = serializers.CharField(write_only=True)
         self.fields['message'] = serializers.CharField(read_only=True)
