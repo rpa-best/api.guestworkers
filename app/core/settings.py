@@ -183,7 +183,7 @@ REST_FRAMEWORK = {
         "rest_framework.filters.SearchFilter",
         "core.utils.filters.OrderingFilter",
     ],
-    'DEFAULT_SCHEMA_CLASS': 'v1_1.common_utils.swagger_schema.CustomAutoSchema',
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'DATETIME_FORMAT': "%d.%m.%Y %H:%M:%S",
     'UPDATE_LAST_LOGIN': True
