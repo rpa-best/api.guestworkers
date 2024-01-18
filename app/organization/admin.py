@@ -7,6 +7,7 @@ from .models import Organization, UserToOrganization
 class UserToOrganizationInline(admin.TabularInline):
     extra = 0
     model = UserToOrganization
+    show_change_link = True
 
 
 @admin.register(Organization)

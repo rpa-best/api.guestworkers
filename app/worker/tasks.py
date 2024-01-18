@@ -44,7 +44,12 @@ def update_workers_from_onec():
             )
         worker_inn = row.get(inn)
         if not Organization.objects.filter(inn=worker_inn).exists():
-            org_data = inn_check_api_validator(worker_inn)
+            try:
+                org_data = inn_check_api_validator(worker_inn)
+            except Exception:
+                org_data = {
+                    "c": row.get(org_name, worker_inn),
+                }
             worker_org = Organization.objects.create(
                 inn=worker_inn,
                 address = org_data.get('a'),

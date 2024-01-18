@@ -58,6 +58,18 @@ class User(AbstractUser):
 
     objects = UserManager()
 
+    def __str__(self) -> str:
+        name = []
+        if self.last_name:
+            name.append(self.last_name)
+        
+        if self.first_name:
+            name.append(self.first_name)
+        
+        if self.surname:
+            name.append(self.surname)
+        return self.email if not name else " ".join(name)
+
     def send_password(self, password):
         return send_email(self.email, _("Password"), f"{_('Password')}: {password}")
 
