@@ -90,7 +90,7 @@ class CreateUserLegalSerializer(serializers.Serializer):
 
     def validate_email(self, value):
         if User.objects.filter(email=value).exists():
-            raise exceptions.ValidationError({'email': [_('User with the given credentials already exists')]})
+            raise exceptions.ValidationError([_('User with the given credentials already exists')])
         return value
     
     def validate_inn(self, value):
@@ -120,7 +120,7 @@ class CreateUserLegalSerializer(serializers.Serializer):
         email = validated_data.get('email')
         phone = validated_data.get('phone')
         user = User.objects.create_user(email=email, phone=phone)
-        org = Organization.objects.create(
+        org, created = Organization.objects.get_or_create(
             inn=inn,
             address = org['a'],
             name = org['c'],
