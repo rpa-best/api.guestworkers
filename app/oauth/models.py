@@ -47,7 +47,7 @@ class UserManager(_UserManager):
 
 class User(AbstractUser):
     email = models.EmailField(_("email address"), unique=True)
-    phone = models.CharField(_("Phone"), blank=True, null=True, validators=[validate_phone])
+    phone = models.CharField(_("Phone"), blank=True, null=True, validators=[validate_phone], max_length=255)
     username = None
 
     REQUIRED_FIELDS = []
