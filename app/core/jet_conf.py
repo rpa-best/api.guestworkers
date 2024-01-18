@@ -30,7 +30,7 @@ JET_THEMES = [
         'title': 'Light Gray'
     }
 ]
-JET_SIDE_MENU_COMPACT = False
+JET_SIDE_MENU_COMPACT = True
 
 # JET_INDEX_DASHBOARD = 'dashboard.IndexDashboard'
 # JET_APP_INDEX_DASHBOARD = 'dashboard.AppIndexDashboard'

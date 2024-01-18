@@ -4,7 +4,8 @@ from rest_framework import status
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
-    TokenViewBase
+    TokenVerifyView,
+    TokenViewBase,
 )
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from .serializers import ChangePasswordSerializer, ChangePasswordPerformSerializer, ChangePasswordVerifySerializer, CreateUserLegalSerializer
@@ -14,6 +15,9 @@ class AuthView(TokenObtainPairView):
     pass
 
 class RefreshTokenView(TokenRefreshView):
+    pass
+
+class VerifyTokenView(TokenVerifyView):
     pass
 
 
