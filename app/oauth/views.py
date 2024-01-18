@@ -34,5 +34,5 @@ class ChangePasswordPerformView(TokenViewBase):
             serializer.is_valid(raise_exception=True)
         except TokenError as e:
             raise InvalidToken(e.args[0])
-
+        serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
