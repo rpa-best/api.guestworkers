@@ -166,8 +166,8 @@ SIMPLE_JWT = {
     # 'SIGNING_KEY': get_file('./jwtRS256.key'),
     # 'VERIFYING_KEY': get_file('./jwtRS256.key.pub'),
     'AUTH_HEADER_TYPES': ('Bearer', 'Token',),
-    'USER_ID_FIELD': 'username',
-    'USER_ID_CLAIM': 'username',
+    'USER_ID_FIELD': 'email',
+    'USER_ID_CLAIM': 'email',
 }
 
 REST_FRAMEWORK = {
