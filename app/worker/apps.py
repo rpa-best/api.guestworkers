@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 from django.db.models.signals import post_migrate
-from django.contrib.auth import apps
+from .utils import create_default_doc_types
 
 
 class WorkerConfig(AppConfig):
@@ -10,11 +10,5 @@ class WorkerConfig(AppConfig):
     def ready(self) -> None:
         post_migrate.connect(
             create_default_doc_types,
-            dispatch_uid="django.contrib.auth.management.create_permissions",
+            dispatch_uid="worker.utils.create_default_doc_types",
         )
-
-        def create_default_doc_types(**kwargs):
-            from .models import DocType, DEFAULT_DOC_TYPES
-
-            for doc in DEFAULT_DOC_TYPES:
-                DocType.objects.get_or_create(**doc)
