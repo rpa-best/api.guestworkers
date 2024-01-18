@@ -7,6 +7,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from organization.models import Organization, UserToOrganization, STATUS_CHECKING, ROLE_OWNER
 from organization.validators import inn_check_api_validator
 from .models import ChangePasswordUUID
+from .validators import validate_phone
 
 User = get_user_model()
 
@@ -109,6 +110,9 @@ class CreateUserLegalSerializer(serializers.Serializer):
             'org_api': org,
             'inn': inn,
         }
+    
+    def validate_phone(self, value):
+        return validate_phone(value)
     
     def create(self, validated_data):
         inn: str = validated_data.get('inn')
