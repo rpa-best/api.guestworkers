@@ -16,6 +16,7 @@ def update_workers_from_onec():
     fio = 'ФИО'
     passport = 'Серия, номер паспорта'
     inn = 'ИНН подразделения'
+    org_name = 'подразделение'
     workers_data = get_workers()
     for row in workers_data:
         worker_fio = row.get(fio, "")
@@ -47,7 +48,7 @@ def update_workers_from_onec():
             worker_org = Organization.objects.create(
                 inn=worker_inn,
                 address = org_data.get('a'),
-                name = org_data.get('c'),
+                name = org_data.get('c') if org_data.get('c') else row.get(org_name, worker_inn),
                 ogrn = org_data.get('o'),
                 kpp = org_data.get('p'),
             )
