@@ -224,6 +224,8 @@ CORS_ALLOW_HEADERS = (
 
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+X_FRAME_OPTIONS = 'ALLOWALL'
+CSRF_TRUSTED_ORIGINS = ["https://www.api.kk.keyman24.ru", "https://api.kk.keyman24.ru"]
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

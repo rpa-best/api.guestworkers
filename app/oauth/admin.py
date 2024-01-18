@@ -41,3 +41,4 @@ class UserAdmin(_UserAdmin):
     list_display = ("email", "first_name", "last_name", "surname", "is_staff")
     ordering = ("email",)
     inlines = [WorkerDocInline]
+    search_fields = ["email", "first_name", "last_name", "surname"]

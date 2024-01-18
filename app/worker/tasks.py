@@ -28,7 +28,6 @@ def update_workers_from_onec():
                 first_name=first_name,
                 last_name=last_name,
                 surname=surname,
-                is_staff=True,
                 _send_email=False
             )
         else:
