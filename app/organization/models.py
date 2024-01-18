@@ -30,8 +30,8 @@ STATUS_DONE = 'done'
 STATUS_NOTHING = None
 STATUS = (
     (STATUS_CHECKING, _('Checking')),
-    (STATUS_DONE, _('Done'))
-    (STATUS_NOTHING, _('Nothing'))
+    (STATUS_DONE, _('Done')),
+    (STATUS_NOTHING, _('Nothing')),
 )
 
 ROLE_OWNER = 'owner'
@@ -40,7 +40,7 @@ ROLE_WORKER = 'worker'
 ROLES = (
     (ROLE_OWNER, _('Owner')),
     (ROLE_CLIENT, _('Client')),
-    (ROLE_WORKER, _('Worker'))
+    (ROLE_WORKER, _('Worker')),
 )
 
 class UserToOrganization(models.Model):
