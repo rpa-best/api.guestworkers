@@ -34,6 +34,8 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
+    'jet',
+    'jet.dashboard',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -147,6 +149,7 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'Guestworker',
     'VERSION': '1.0',
     'COMPONENT_SPLIT_REQUEST': True,
+    'SERVE_INCLUDE_SCHEMA': False,
     # OTHER SETTINGS
 }
 
