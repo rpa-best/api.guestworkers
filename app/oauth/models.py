@@ -10,6 +10,7 @@ from rest_framework_simplejwt.utils import aware_utcnow
 from rest_framework import exceptions
 from core.utils.email import send_email
 from .utils import generate_password
+from .validators import validate_phone
 
 
 CHANGE_PASSWORD_URL = "https://kk.keyman24.ru/change-password"
@@ -46,6 +47,7 @@ class UserManager(_UserManager):
 
 class User(AbstractUser):
     email = models.EmailField(_("email address"), unique=True)
+    phone = models.CharField(_("Phone"), blank=True, null=True, validators=[validate_phone])
     username = None
 
     REQUIRED_FIELDS = []

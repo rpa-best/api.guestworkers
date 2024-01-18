@@ -1,3 +1,4 @@
+from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.views import (
@@ -6,7 +7,7 @@ from rest_framework_simplejwt.views import (
     TokenViewBase
 )
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
-from .serializers import ChangePasswordSerializer, ChangePasswordPerformSerializer, ChangePasswordVerifySerializer
+from .serializers import ChangePasswordSerializer, ChangePasswordPerformSerializer, ChangePasswordVerifySerializer, CreateUserLegalSerializer
 
 
 class AuthView(TokenObtainPairView):
@@ -36,3 +37,9 @@ class ChangePasswordPerformView(TokenViewBase):
             raise InvalidToken(e.args[0])
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class CreateUserLegalView(CreateAPIView):
+    authentication_classes = ()
+    permission_classes = ()
+    serializer_class = CreateUserLegalSerializer

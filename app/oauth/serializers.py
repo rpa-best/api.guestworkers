@@ -1,7 +1,10 @@
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
+from django.core.validators import MaxLengthValidator, MinLengthValidator
 from rest_framework import serializers, exceptions
 from rest_framework_simplejwt.settings import api_settings
+from organization.models import Organization, UserToOrganization, STATUS_CHECKING, ROLE_OWNER
+from organization.validators import inn_check_api_validator
 from .models import ChangePasswordUUID
 
 User = get_user_model()
@@ -63,7 +66,7 @@ class ChangePasswordPerformSerializer(serializers.Serializer):
         uuid: ChangePasswordUUID = attrs['uuid']
         uuid.validate()
         if not password1 == password2:
-            raise exceptions.ValidationError(_("Passwords must be equels"), "password1_not_equel_password2")
+            raise exceptions.ValidationError({'password2': [_("Passwords must be equels")]}, "password1_not_equel_password2")
         attrs['password'] = password1
         return attrs
     
@@ -73,3 +76,50 @@ class ChangePasswordPerformSerializer(serializers.Serializer):
         return {
             "message": _('Password changed')
         }
+    
+
+class CreateUserLegalSerializer(serializers.Serializer):
+    inn = serializers.CharField(write_only=True)
+    email = serializers.EmailField(write_only=True)
+    phone = serializers.CharField(write_only=True)
+    message = serializers.CharField(read_only=True)
+
+    def validate_email(self, value):
+        if User.objects.filter(email=value).exists():
+            raise exceptions.ValidationError({'email': [_('User with the given credentials already exists')]})
+        return value
+    
+    def validate_inn(self, value):
+        MaxLengthValidator(10, 'Неправильный ИНН')(value)
+        MinLengthValidator(8, 'Неправильный ИНН')(value)
+        return value
+
+    def validate(self, attrs):
+        inn: str = attrs['inn']
+        email: str = attrs['email']
+        org = inn_check_api_validator(inn)
+        if UserToOrganization.objects.filter(org__inn=inn, role=ROLE_OWNER).exists():
+            raise exceptions.ValidationError({'org': [_('This organization already using with an other user')]})
+        return {
+            'email': email,
+            'phone': attrs['phone'],
+            'org_api': org,
+            'inn': inn,
+        }
+    
+    def create(self, validated_data):
+        inn: str = validated_data.get('inn')
+        org: dict = validated_data.get('org_api')
+        email = validated_data.get('email')
+        phone = validated_data.get('phone')
+        user = User.objects.create_user(email=email, phone=phone)
+        org = Organization.objects.create(
+            inn=inn,
+            address = org['a'],
+            name = org['c'],
+            ogrn = org['o'],
+            kpp = org['p'],
+        )
+        UserToOrganization.objects.create(
+            org=org, user=user, status=STATUS_CHECKING, role=ROLE_OWNER
+        )
