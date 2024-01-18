@@ -3,6 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from django.core.validators import MaxLengthValidator, MinLengthValidator
 from rest_framework import serializers, exceptions
 from rest_framework_simplejwt.settings import api_settings
+from rest_framework_simplejwt.tokens import RefreshToken 
 from organization.models import Organization, UserToOrganization, STATUS_CHECKING, ROLE_OWNER
 from organization.validators import inn_check_api_validator
 from .models import ChangePasswordUUID
@@ -83,6 +84,8 @@ class CreateUserLegalSerializer(serializers.Serializer):
     email = serializers.EmailField(write_only=True)
     phone = serializers.CharField(write_only=True)
     message = serializers.CharField(read_only=True)
+    access = serializers.CharField(read_only=True)
+    refresh = serializers.CharField(read_only=True)
 
     def validate_email(self, value):
         if User.objects.filter(email=value).exists():
@@ -123,3 +126,9 @@ class CreateUserLegalSerializer(serializers.Serializer):
         UserToOrganization.objects.create(
             org=org, user=user, status=STATUS_CHECKING, role=ROLE_OWNER
         )
+        token = RefreshToken(self.context['request']).for_user(user)
+        return {
+            'message': _('Invite created'),
+            'access': str(token.access_token),
+            'refresh': str(token),
+        }
