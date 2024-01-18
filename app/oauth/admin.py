@@ -1,13 +1,8 @@
 from django.contrib import admin
-from django.contrib.auth.models import Group
-from django.contrib.auth.admin import UserAdmin as _UserAdmin, GroupAdmin
+from django.contrib.auth.admin import UserAdmin as _UserAdmin
 from django.utils.translation import gettext_lazy as _
 from worker.models import WorkerDoc
 from .models import User
-
-
-admin.site.unregister(Group)
-admin.site.register(Group, GroupAdmin)
 
 
 class WorkerDocInline(admin.TabularInline):
