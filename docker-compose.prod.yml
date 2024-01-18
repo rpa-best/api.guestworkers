@@ -12,3 +12,27 @@ services:
       - ./app/.env
     volumes:
       - ./app/:/app/
+
+  kk_redis:
+    container_name: kk_redis
+    image: redis:alpine
+  
+  kk_celery:
+    container_name: kk_celery
+    build: ./app/
+    command: celery -A core worker -l info
+    volumes:
+      - ./app/:/app/
+    restart: always
+    env_file:
+      - ./app/.env
+  
+  kk_celery_beat:
+    container_name: kk_celery_beat
+    build: ./app/
+    command: celery -A core beat -l info
+    volumes:
+      - ./app/:/app/
+    restart: always
+    env_file:
+      - ./app/.env
