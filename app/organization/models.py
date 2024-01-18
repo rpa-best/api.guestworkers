@@ -44,11 +44,13 @@ ROLES = (
 )
 
 class UserToOrganization(models.Model):
-    org = models.ForeignKey(Organization, models.CASCADE)
-    user = models.ForeignKey(User, models.CASCADE)
-    status = models.CharField(max_length=20, choices=STATUS, null=True)
-    role = models.CharField(max_length=20, choices=ROLES, default=ROLE_WORKER)
+    org = models.ForeignKey(Organization, models.CASCADE, verbose_name=_('Организация'))
+    user = models.ForeignKey(User, models.CASCADE, verbose_name=_('Пользовател'))
+    status = models.CharField(max_length=20, choices=STATUS, null=True, verbose_name=_('Статус'))
+    role = models.CharField(max_length=20, choices=ROLES, default=ROLE_WORKER, verbose_name=_('Роль'))
     
     class Meta:
         unique_together = (("org", "user"),)
+        verbose_name = "Сотрудник"
+        verbose_name_plural = "Сотрудники"
     
