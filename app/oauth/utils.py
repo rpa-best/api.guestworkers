@@ -1,8 +1,5 @@
 import secrets
 import string
-from django.contrib.auth import get_user_model
-
-User = get_user_model()
 
 def generate_password(length=8):
     alphabet = string.ascii_letters + string.digits
@@ -10,6 +7,9 @@ def generate_password(length=8):
 
 
 def generate_user_email():
+    from django.contrib.auth import get_user_model
+
+    User = get_user_model()
     last_id = User.objects.all().order_by("id").last().id
     return f'user{last_id + 1}@guestworkers.ru'
 
