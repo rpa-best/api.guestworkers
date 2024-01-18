@@ -126,7 +126,7 @@ class CreateUserLegalSerializer(serializers.Serializer):
         UserToOrganization.objects.create(
             org=org, user=user, status=STATUS_CHECKING, role=ROLE_OWNER
         )
-        token = RefreshToken(self.context['request']).for_user(user)
+        token = RefreshToken().for_user(user)
         return {
             'message': _('Invite created'),
             'access': str(token.access_token),
