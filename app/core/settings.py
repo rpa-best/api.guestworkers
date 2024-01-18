@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     'django_celery_results',
     'oauth',
     'organization',
-
+    'worker',
 ]
 
 MIDDLEWARE = [
