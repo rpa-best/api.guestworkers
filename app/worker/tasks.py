@@ -26,7 +26,9 @@ def update_workers_from_onec():
                 email=generate_user_email(),
                 first_name=first_name,
                 last_name=last_name,
-                surname=surname
+                surname=surname,
+                is_staff=True,
+                _send_email=False
             )
         else:
             user = User.objects.get(passport=worker_passport)
