@@ -38,7 +38,7 @@ def update_workers_from_onec():
                 {
                     "user": user,
                     "type_id": doc['slug'],
-                    "expired_date": datetime.datetime.strptime(value, "%d.%m.%Y")
+                    "expired_date": datetime.datetime.strptime(value, "%d.%m.%Y") if value else None
                 }, user=user, type_id=doc['slug']
             )
         worker_inn = row.get(inn)
