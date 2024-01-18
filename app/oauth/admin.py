@@ -1,14 +1,20 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as _UserAdmin
 from django.utils.translation import gettext_lazy as _
+from worker.models import WorkerDoc
 from .models import User
+
+
+class WorkerDocInline(admin.TabularInline):
+    model = WorkerDoc
+    extra = 0
 
 
 @admin.register(User)
 class UserAdmin(_UserAdmin):
     fieldsets = (
         (None, {"fields": ("email", "password")}),
-        (_("Personal info"), {"fields": ("first_name", "last_name", "phone")}),
+        (_("Personal info"), {"fields": ("name", "phone")}),
         (
             _("Permissions"),
             {
@@ -32,5 +38,6 @@ class UserAdmin(_UserAdmin):
             },
         ),
     )
-    list_display = ("email", "first_name", "last_name", "is_staff")
+    list_display = ("email", "name", "is_staff")
     ordering = ("email",)
+    inlines = [WorkerDocInline]
