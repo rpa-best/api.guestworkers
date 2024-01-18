@@ -88,7 +88,7 @@ class ChangePasswordUUID(models.Model):
         try:
             validate_password(password)
         except ValidationError as _exp:
-            raise exceptions.ValidationError(_exp.message, _exp.code)
+            raise exceptions.ValidationError(_exp.messages, _exp.code)
         user.password = make_password(password)
         user.save()
         return user
