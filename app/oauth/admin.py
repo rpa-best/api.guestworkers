@@ -14,7 +14,7 @@ class WorkerDocInline(admin.TabularInline):
 class UserAdmin(_UserAdmin):
     fieldsets = (
         (None, {"fields": ("email", "password")}),
-        (_("Personal info"), {"fields": ("name", "phone")}),
+        (_("Personal info"), {"fields": ("first_name", "last_name", "surname", "phone")}),
         (
             _("Permissions"),
             {
@@ -38,6 +38,6 @@ class UserAdmin(_UserAdmin):
             },
         ),
     )
-    list_display = ("email", "name", "is_staff")
+    list_display = ("email", "first_name", "last_name", "surname", "is_staff")
     ordering = ("email",)
     inlines = [WorkerDocInline]
