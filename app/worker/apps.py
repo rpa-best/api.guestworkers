@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 from django.db.models.signals import post_migrate
-from .utils import create_default_doc_types
+from .management import create_default_doc_types
 
 
 class WorkerConfig(AppConfig):
@@ -10,5 +10,5 @@ class WorkerConfig(AppConfig):
     def ready(self) -> None:
         post_migrate.connect(
             create_default_doc_types,
-            dispatch_uid="worker.utils.create_default_doc_types",
+            dispatch_uid="worker.management.create_default_doc_types",
         )
