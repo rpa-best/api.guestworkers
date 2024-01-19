@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
 SOON_EXPIRE_LIMIT = timezone.timedelta(days=5)
-UPLOAD_KWARGS_PASSPORT = 'Серия, номер паспорта', '99 99 999999'
+UPLOAD_KWARGS_PASSPORT = 'Серия, номер паспорта'
 UPLOAD_KWARGS = (
     ('first_name', 'Имя', 'Пётр'),
     ('last_name', 'Фамилия', 'Петров'),
