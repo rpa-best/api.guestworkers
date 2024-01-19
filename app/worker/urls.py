@@ -5,8 +5,8 @@ from . import views
 router = DefaultRouter()
 router.register("worker", views.WorkerView, "")
 router.register("doc-type", views.DocTypeView, "")
-router.register(r"worker/(?P<inventory_id>\d+)/org", views.WorkerToUserUpdateView)
-router.register(r"worker/(?P<inventory_id>\d+)/doc", views.WorkerDocUpdateView)
+router.register(r"worker/(?P<inventory_id>\d+)/org", views.WorkerToUserUpdateView, "")
+router.register(r"worker/(?P<inventory_id>\d+)/doc", views.WorkerDocUpdateView, "")
 
 urlpatterns = [
     path('', include(router.urls)),
