@@ -11,9 +11,14 @@ class OrganizationView(ModelViewSet):
     pagination_class = None
     lookup_url_kwarg = "inn"
     lookup_field = "inn"
+    http_method_names = ["get", "head", "post", "patch", "delete"]
 
     def get_queryset(self):
         return Organization.get_orgs(self.request.user, self.action in ["create", "partial_update", "update"])
+    
+    def update(self, request, *args, **kwargs):
+        request.data.update(inn=self.kwargs.get("inn"))
+        return super().update(request, *args, **kwargs)
 
 
 class OrganizationApiView(ListAPIView):
