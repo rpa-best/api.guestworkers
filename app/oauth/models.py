@@ -31,7 +31,7 @@ class UserManager(_UserManager):
                 users_id = [*users_id, *UserToOrganization.objects.exclude(status=STATUS_CHECKING).filter(org_id=uto.org_id).values_list("user_id", flat=True)]
             if uto.role in [ROLE_CLIENT] and change:
                 exclude_ids = [*exclude_ids, *UserToOrganization.objects.exclude(status=STATUS_CHECKING).filter(org_id=uto.org_id, role=ROLE_OWNER).values_list("user_id", flat=True)]
-        return self.filter(id__in=users_id)
+        return self.filter(id__in=users_id).exclude(id__in=exclude_ids)
 
     def _create_user(self, email=None, password=None, **extra_fields):
         email = self.normalize_email(email)

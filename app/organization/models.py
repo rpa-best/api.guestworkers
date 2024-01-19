@@ -16,6 +16,11 @@ class Organization(models.Model):
     phone = models.CharField("Телефон", max_length=20, blank=True, null=True)
     ogrn = models.CharField("ОГРН", max_length=20, blank=True, null=True)
     kpp = models.CharField("КПП", max_length=20, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    phone_name = models.CharField(max_length=255, blank=True, null=True)
+    gen_name = models.CharField(max_length=255, blank=True, null=True)
+    r_s = models.CharField(max_length=255, blank=True, null=True)
+    k_s = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         verbose_name = "Организация"
@@ -23,6 +28,18 @@ class Organization(models.Model):
 
     def __str__(self) -> str:
         return self.name if self.name else self.inn
+    
+    @classmethod
+    def get_orgs(cls, user, change=False):
+        if user.is_anonymous:
+            return cls.objects.all()
+        orgs_id = []
+        exclude_ids = []
+        for uto in UserToOrganization.objects.exclude(status=STATUS_CHECKING).filter(user=user):
+            orgs_id.append(uto.org_id)
+            if uto.role in [ROLE_WORKER] and change:
+                exclude_ids.append(uto.org_id)
+        return cls.objects.filter(id__in=orgs_id).exclude(id__in=exclude_ids)
 
 STATUS_CHECKING = 'checking'
 STATUS_DONE = 'done'
