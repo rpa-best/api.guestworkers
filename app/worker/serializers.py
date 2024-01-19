@@ -161,7 +161,7 @@ class WorkerRetriveSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["id", "first_name", "last_name", "surname", "phone", "email", "docs"]
+        fields = ["id", "first_name", "last_name", "surname", "phone", "email", "docs", "orgs"]
 
     @extend_schema_field(WorkerDocShowSerializer(many=True)) 
     def get_docs(self, obj: User):
