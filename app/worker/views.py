@@ -1,7 +1,7 @@
 import pandas as pd
 from django.utils.translation import gettext_lazy as _
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
-from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView
+from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 from rest_pandas.views import PandasView
 from core.utils.renderers import PandasExcelRenderer
@@ -56,17 +56,17 @@ class WorkerView(ModelViewSet):
             return serializers.WorkerCreateSerializer
         return serializers.WorkerRetriveSerializer
     
-    def create(self, request, *args, **kwargs):
-        if not has_permission(None, request.user, [ROLE_OWNER, ROLE_CLIENT]):
+    def check_permissions(self, request):
+        super().check_permissions(request)
+        if self.action in ["create"] and not has_permission(None, request.user, [ROLE_OWNER, ROLE_CLIENT]):
             self.permission_denied(request)
-        return super().create(request, *args, **kwargs)
 
 
-class WorkerToUserUpdateView(RetrieveUpdateAPIView):
+class WorkerToUserUpdateView(ModelViewSet):
     http_method_names = ["get", "head", "patch"]
 
     def get_serializer_class(self):
-        if self.request.method == "PATCH":
+        if self.action == "partial_update":
             return WorkerToOrganizationUpdateSerializer
         return serializers.WorkerToOrganizationSerializer
 
@@ -78,11 +78,11 @@ class WorkerToUserUpdateView(RetrieveUpdateAPIView):
         return super().update(request, *args, **kwargs)
     
 
-class WorkerDocUpdateView(RetrieveUpdateAPIView):
+class WorkerDocUpdateView(ModelViewSet):
     http_method_names = ["get", "head", "patch"]
 
     def get_serializer_class(self):
-        if self.request.method == "PATCH":
+        if self.action == "partial_update":
             return serializers.WorkerDocUpdateSerializer
         return serializers.WorkerDocShowSerializer
     
