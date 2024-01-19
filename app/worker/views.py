@@ -31,7 +31,7 @@ class WorkerView(ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        if user.is_anonymous():
+        if user.is_anonymous:
             return User.objects.all()
         users_id = []
         for uto in UserToOrganization.objects.exclude(status=STATUS_CHECKING).filter(user=user):
