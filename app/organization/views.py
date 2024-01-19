@@ -8,6 +8,9 @@ from .validators import inn_check_api_validator
 
 class OrganizationView(ModelViewSet):
     serializer_class = OrganizationSerializer
+    pagination_class = None
+    lookup_url_kwarg = "inn"
+    lookup_field = "inn"
 
     def get_queryset(self):
         return Organization.get_orgs(self.request.user, self.action in ["create", "partial_update", "update"])
