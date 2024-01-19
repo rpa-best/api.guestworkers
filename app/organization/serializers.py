@@ -5,7 +5,7 @@ from .models import Organization, UserToOrganization
 class OrganizationShortSerializer(serializers.ModelSerializer):
     class Meta:
         model = Organization
-        fields = ["inn", "name"]
+        fields = ["inn", "name", "ogrn", "address", "kpp"]
 
 
 class OrganizationSerializer(serializers.ModelSerializer):
