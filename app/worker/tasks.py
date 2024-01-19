@@ -2,7 +2,7 @@ import datetime
 from celery import shared_task
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model
-from oauth.utils import parse_fio, generate_user_email
+from oauth.utils import parse_fio
 from organization.models import Organization, UserToOrganization, STATUS_DONE, ROLE_WORKER
 from organization.validators import inn_check_api_validator
 from .ftp import get_workers
@@ -24,10 +24,10 @@ def update_workers_from_onec():
         worker_passport: str = row.get(passport)
         if not User.objects.filter(passport=worker_passport).exists():
             user = User.objects.create_user(
-                email=generate_user_email(),
                 first_name=first_name,
                 last_name=last_name,
                 surname=surname,
+                passport=worker_passport,
                 _send_email=False
             )
         else:

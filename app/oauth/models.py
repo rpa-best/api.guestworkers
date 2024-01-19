@@ -9,7 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework_simplejwt.utils import aware_utcnow
 from rest_framework import exceptions
 from core.utils.email import send_email
-from .utils import generate_password
+from .utils import generate_password, generate_user_email
 from .validators import validate_phone
 
 
@@ -38,6 +38,8 @@ class UserManager(_UserManager):
     def create_user(self, email=None, password=None, _send_email=True, **extra_fields):
         if not password:
             password = generate_password()
+        if not email:
+            email = generate_user_email()
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
         user: User = self._create_user(email, password, **extra_fields)
