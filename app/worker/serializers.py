@@ -42,14 +42,13 @@ class UploadCheckSerializer(serializers.Serializer):
                 'docs': []
             }
             passport = worker.get(UPLOAD_KWARGS_PASSPORT)
-            print(passport, "passport")
             if not passport:
                 continue
             try:
                 user = UserShortSerializer(User.objects.get(passport=passport)).data
             except User.DoesNotExist:
                 user = {}
-                for key, value, defult in UPLOAD_KWARGS:
+                for key, value, default in UPLOAD_KWARGS:
                     user[key] = worker.get(value)
             rworker["user"] = user
             for doc_type in DEFAULT_DOC_TYPES:

@@ -9,7 +9,7 @@ UPLOAD_KWARGS = (
     ('first_name', 'Имя', 'Пётр'),
     ('last_name', 'Фамилия', 'Петров'),
     ('surname', 'Отчество', 'Петрович'),
-    ('passport', UPLOAD_KWARGS_PASSPORT),
+    ('passport', UPLOAD_KWARGS_PASSPORT, "99 99 999999"),
 )
 DEFAULT_DOC_TYPES = [
     {'slug': 'chek_do', 'name': 'Чек до'},
