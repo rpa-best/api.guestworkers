@@ -71,7 +71,7 @@ class WorkerToUserUpdateView(ModelViewSet):
         return serializers.WorkerToOrganizationSerializer
 
     def get_queryset(self):
-        return UserToOrganization.objects.filter(user__in=User.objects.get_users(self.request.user, self.request.method == "PATCH"))
+        return UserToOrganization.objects.filter(user__in=User.objects.get_users(self.request.user, self.request.method == "PATCH")).distinct("id")
     
     def update(self, request, *args, **kwargs):
         request.data.update(user=self.kwargs.get("worker_id"))
@@ -79,15 +79,15 @@ class WorkerToUserUpdateView(ModelViewSet):
     
 
 class WorkerDocUpdateView(ModelViewSet):
-    http_method_names = ["get", "head", "patch"]
+    http_method_names = ["get", "head", "patch", "create"]
 
     def get_serializer_class(self):
-        if self.action == "partial_update":
+        if self.action in ["partial_update", "create"]:
             return serializers.WorkerDocUpdateSerializer
         return serializers.WorkerDocShowSerializer
     
     def get_queryset(self):
-        return models.WorkerDoc.objects.filter(user__in=User.objects.get_users(self.request.user, self.request.method == "PATCH"))
+        return models.WorkerDoc.objects.filter(user__in=User.objects.get_users(self.request.user, self.request.method == "PATCH")).distinct("id")
     
     def update(self, request, *args, **kwargs):
         request.data.update(user=self.kwargs.get("worker_id"))
