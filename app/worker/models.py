@@ -4,11 +4,12 @@ from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
 SOON_EXPIRE_LIMIT = timezone.timedelta(days=5)
+UPLOAD_KWARGS_PASSPORT = 'Серия, номер паспорта', '99 99 999999'
 UPLOAD_KWARGS = (
     ('first_name', 'Имя', 'Пётр'),
     ('last_name', 'Фамилия', 'Петров'),
     ('surname', 'Отчество', 'Петрович'),
-    ('passport', 'Серия, номер паспорта', '99 99 999999'),
+    ('passport', UPLOAD_KWARGS_PASSPORT),
 )
 DEFAULT_DOC_TYPES = [
     {'slug': 'chek_do', 'name': 'Чек до'},

@@ -12,6 +12,13 @@ from .validators import validate_phone
 User = get_user_model()
 
 
+class UserShortSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ["id", "first_name", "last_name", "surname", "passport"]
+
+
 class ChangePasswordSerializer(serializers.Serializer):
     username_field = User.USERNAME_FIELD
 
