@@ -93,6 +93,8 @@ class UploadPerformSerializer(serializers.Serializer):
     message = serializers.CharField(read_only=True)
 
     def validate(self, attrs):
+        if not has_permission(attrs["org"].inn, self.context["request"].user.id, [ROLE_OWNER, ROLE_CLIENT]):
+            raise PermissionDenied({'inn': [_("Not permission to upload this organization")]})
         return attrs
     
     def create(self, validated_data):

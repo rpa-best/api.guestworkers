@@ -20,4 +20,4 @@ class UploadCheckView(CreateAPIView):
 
 
 class UploadPerformView():
-    pass
+    serializer_class = serializers.UploadPerformSerializer
