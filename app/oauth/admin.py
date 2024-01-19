@@ -4,6 +4,8 @@ from django.utils.translation import gettext_lazy as _
 from worker.models import WorkerDoc
 from .models import User
 
+admin.site.name = "Капитал кадри"
+admin.site.site_header = "Капитал кадри"
 
 class WorkerDocInline(admin.TabularInline):
     model = WorkerDoc

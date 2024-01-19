@@ -38,7 +38,7 @@ class UploadPerformView(CreateAPIView):
 class DocTypeView(ReadOnlyModelViewSet):
     serializer_class = serializers.DocTypeSerializer
     queryset = models.DocType.objects.all()
-    permission_classes = None
+    pagination_class = None
     filterset_class = filters.DocTypeFilter
     search_fields = ["name"]
 
