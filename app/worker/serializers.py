@@ -10,7 +10,7 @@ from organization.models import Organization, UserToOrganization, ROLE_WORKER, R
 from organization.permissions import has_permission
 from organization.serializers import OrganizationShortSerializer, WorkerToOrganizationSerializer
 from oauth.serializers import UserShortSerializer
-from .models import WorkerDoc, DocType, UPLOAD_KWARGS, DEFAULT_DOC_TYPES, UPLOAD_KWARGS_PASSPORT
+from .models import WorkerDoc, DocType, UPLOAD_KWARGS, DEFAULT_DOC_TYPES, UPLOAD_KWARGS_PASSPORT, DOC_STATUS_EXPIRED, DOC_STATUS_NORM, DOC_STATUS_SOON_EXPIRED
 
 User = get_user_model()
 
@@ -137,12 +137,15 @@ class DocTypeSerializer(serializers.ModelSerializer):
 
 class WorkerDocShowSerializer(serializers.ModelSerializer):
     type = DocTypeSerializer()
-    is_expired = serializers.DateField(source="is_expired")
-    is_soon_expired = serializers.DateField(source="is_soon_expired")
+    status_doc = serializers.SerializerMethodField()
 
     class Meta:
         model = WorkerDoc
         exclude = ["user"]
+
+    @extend_schema_field(serializers.CharField())
+    def get_status_doc(self, obj: WorkerDoc):
+        return DOC_STATUS_EXPIRED if obj.is_expired else DOC_STATUS_SOON_EXPIRED if obj.is_soon_expired else DOC_STATUS_NORM
 
 
 class WorkerListSerializer(serializers.ModelSerializer):
