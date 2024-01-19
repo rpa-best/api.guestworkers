@@ -1,13 +1,14 @@
 import datetime
 import pandas as pd
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 from rest_framework.exceptions import PermissionDenied
 from django.core.validators import FileExtensionValidator
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
-from organization.models import Organization, UserToOrganization, ROLE_WORKER, ROLE_CLIENT, ROLE_OWNER, STATUS_DONE
+from organization.models import Organization, UserToOrganization, ROLE_WORKER, ROLE_CLIENT, ROLE_OWNER, STATUS_DONE, ROLES
 from organization.permissions import has_permission
-from organization.serializers import OrganizationShortSerializer
+from organization.serializers import OrganizationShortSerializer, WorkerToOrganizationSerializer
 from oauth.serializers import UserShortSerializer
 from .models import WorkerDoc, DocType, UPLOAD_KWARGS, DEFAULT_DOC_TYPES, UPLOAD_KWARGS_PASSPORT
 
@@ -126,3 +127,62 @@ class UploadPerformSerializer(serializers.Serializer):
         return {
             "message": _("Uploaded success")
         }
+    
+
+class DocTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DocType
+        fields = "__all__"
+
+
+class WorkerDocShowSerializer(serializers.ModelSerializer):
+    type = DocTypeSerializer()
+
+    class Meta:
+        model = WorkerDoc
+        exclude = ["user"]
+
+
+class WorkerListSerializer(serializers.ModelSerializer):
+    docs = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = ["id", "first_name", "last_name", "surname", "docs"]
+
+    @extend_schema_field(WorkerDocShowSerializer(many=True)) 
+    def get_docs(self, obj: User):
+        return WorkerDocShowSerializer(WorkerDoc.objects.filter(user=obj, main=True), many=True).data
+
+
+class WorkerRetriveSerializer(serializers.ModelSerializer):
+    docs = serializers.SerializerMethodField()
+    orgs = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = ["id", "first_name", "last_name", "surname", "phone", "email", "docs"]
+
+    @extend_schema_field(WorkerDocShowSerializer(many=True)) 
+    def get_docs(self, obj: User):
+        return WorkerDocShowSerializer(WorkerDoc.objects.filter(user=obj), many=True, context=self.context).data
+    
+    @extend_schema_field(WorkerToOrganizationSerializer(many=True))
+    def get_orgs(self, obj: User):
+        return WorkerToOrganizationSerializer(UserToOrganization.objects.filter(user=obj), many=True, context=self.context).data
+
+
+class WorkerUpdateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ["first_name", "last_name", "surname", "phone", "email"]
+
+
+class WorkerCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["first_name", "last_name", "surname", "phone", "email"]
+
+    def create(self, validated_data):
+        return User.objects.create_user(**validated_data, _send_email=validated_data.get("email"))
