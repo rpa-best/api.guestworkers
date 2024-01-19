@@ -51,6 +51,7 @@ class CreateUserLegalView(CreateAPIView):
 
 class AccountView(RetrieveUpdateAPIView):
     serializer_class = AccountSerializer
+    http_method_names = ["get", "head", "patch"]
 
     def get_object(self):
         return self.request.user
