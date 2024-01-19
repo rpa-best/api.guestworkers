@@ -60,9 +60,6 @@ class User(AbstractUser):
 
     objects = UserManager()
 
-    class Meta:
-        unique_together = (("first_name", "last_name", "surname"),)
-
     def __str__(self) -> str:
         name = []
         if self.last_name:

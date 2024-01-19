@@ -59,7 +59,7 @@ class UploadCheckSerializer(serializers.Serializer):
                     {
                         "type": doc_type["slug"],
                         "name": doc_type["name"],
-                        "expired_date": datetime.datetime.strptime(value, "%d.%m.%Y") if value else None
+                        "expired_date": datetime.datetime.strptime(value, "%d.%m.%Y").date().strftime("%Y-%m-%d") if value else None
                     }
                 )
             if not user.get("id"):
