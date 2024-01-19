@@ -1,7 +1,7 @@
 from .models import UserToOrganization, ROLE_CLIENT, ROLE_OWNER, ROLE_WORKER, STATUS_CHECKING
 
 
-def has_permission(org_inn: str, user: str | int, roles: list[str]):
+def has_permission(org_inn: str, user, roles: list[str]):
     kwargs = {
         "org_id": org_inn,
         "role__in": roles,
