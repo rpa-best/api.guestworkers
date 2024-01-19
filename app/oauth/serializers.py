@@ -19,6 +19,13 @@ class UserShortSerializer(serializers.ModelSerializer):
         fields = ["id", "first_name", "last_name", "surname", "passport"]
 
 
+class AccountSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ["first_name", "last_name", "surname", "phone", "email"]
+
+
 class ChangePasswordSerializer(serializers.Serializer):
     username_field = User.USERNAME_FIELD
 

@@ -1,4 +1,4 @@
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.views import (
@@ -8,7 +8,7 @@ from rest_framework_simplejwt.views import (
     TokenViewBase,
 )
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
-from .serializers import ChangePasswordSerializer, ChangePasswordPerformSerializer, ChangePasswordVerifySerializer, CreateUserLegalSerializer
+from .serializers import ChangePasswordSerializer, ChangePasswordPerformSerializer, ChangePasswordVerifySerializer, CreateUserLegalSerializer, AccountSerializer
 
 
 class AuthView(TokenObtainPairView):
@@ -47,3 +47,10 @@ class CreateUserLegalView(CreateAPIView):
     authentication_classes = ()
     permission_classes = ()
     serializer_class = CreateUserLegalSerializer
+
+
+class AccountView(RetrieveUpdateAPIView):
+    serializer_class = AccountSerializer
+
+    def get_object(self):
+        return self.request.user

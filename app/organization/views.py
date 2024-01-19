@@ -13,6 +13,11 @@ class OrganizationView(ModelViewSet):
     lookup_field = "inn"
     http_method_names = ["get", "head", "post", "patch", "delete"]
 
+    def get_serializer_class(self):
+        if self.action in ["list"]:
+            return
+        return OrganizationSerializer
+
     def get_queryset(self):
         return Organization.get_orgs(self.request.user, self.action in ["create", "partial_update", "update"])
     
