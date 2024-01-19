@@ -7,7 +7,7 @@ from .models import WorkerDoc, DocType, SOON_EXPIRE_LIMIT, DOC_STATUS_EXPIRED, D
 
 class WorkerFilter(filters.FilterSet):
     org = filters.CharFilter("usertoorganization__org_id")
-    status_doc = filters.ChoiceFilter(choices=DOC_STATUS)
+    status_doc = filters.ChoiceFilter(choices=DOC_STATUS, method="filter_status_doc")
 
     class Meta:
         model = get_user_model()
