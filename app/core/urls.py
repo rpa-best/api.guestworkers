@@ -28,6 +28,7 @@ urlpatterns = [
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/oauth/', include('oauth.urls')),
     path('api/worker/', include('worker.urls')),
+    path('api/organization/', include('organization.urls')),
 ]
 
 if settings.DEBUG:
