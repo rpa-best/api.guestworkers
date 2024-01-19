@@ -1,6 +1,6 @@
 import django_filters.rest_framework as filters
 from django.contrib.auth import get_user_model
-from django.db.models import Exists, OuterRef, When, Case
+from django.db.models import Exists, OuterRef, When, Case, Value
 from django.utils import timezone
 from .models import WorkerDoc, DocType, SOON_EXPIRE_LIMIT, DOC_STATUS_EXPIRED, DOC_STATUS_NORM, DOC_STATUS_SOON_EXPIRED, DOC_STATUS
 
@@ -20,14 +20,14 @@ class WorkerFilter(filters.FilterSet):
                 When(
                     Exists(
                         WorkerDoc.objects.filter(user_id=OuterRef("id"), expired_date__lte=now)
-                    ), DOC_STATUS_EXPIRED
+                    ), Value(DOC_STATUS_EXPIRED)
                 ),
                 When(
                     Exists(
                         WorkerDoc.objects.filter(user_id=OuterRef("id"), expired_date__lte=now-SOON_EXPIRE_LIMIT)
-                    ), DOC_STATUS_SOON_EXPIRED
+                    ), Value(DOC_STATUS_SOON_EXPIRED)
                 ),
-                default=DOC_STATUS_NORM
+                default=Value(DOC_STATUS_NORM)
             )
         ).filter(status_doc=value)
     
