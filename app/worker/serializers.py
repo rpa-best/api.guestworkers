@@ -42,6 +42,7 @@ class UploadCheckSerializer(serializers.Serializer):
                 'docs': []
             }
             passport = worker.get(UPLOAD_KWARGS_PASSPORT)
+            print(passport, "passport")
             if not passport:
                 continue
             try:

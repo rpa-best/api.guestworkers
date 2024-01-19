@@ -27,11 +27,9 @@ class Organization(models.Model):
 
 STATUS_CHECKING = 'checking'
 STATUS_DONE = 'done'
-STATUS_NOTHING = None
 STATUS = (
     (STATUS_CHECKING, _('Checking')),
     (STATUS_DONE, _('Done')),
-    (STATUS_NOTHING, _('Nothing')),
 )
 
 ROLE_OWNER = 'owner'
