@@ -3,9 +3,10 @@ from .models import UserToOrganization, ROLE_CLIENT, ROLE_OWNER, ROLE_WORKER, ST
 
 def has_permission(org_inn: str, user, roles: list[str]):
     kwargs = {
-        "org_id": org_inn,
         "role__in": roles,
     }
+    if org_inn:
+        kwargs["org_id"] = org_inn
     if isinstance(user, str):
         kwargs["user__email"] = user
     elif isinstance(user, int):

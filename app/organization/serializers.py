@@ -20,3 +20,9 @@ class WorkerToOrganizationSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserToOrganization
         exclude = ["user"]
+
+
+class WorkerToOrganizationUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserToOrganization
+        fields = ["role"]

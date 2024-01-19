@@ -9,6 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework_simplejwt.utils import aware_utcnow
 from rest_framework import exceptions
 from core.utils.email import send_email
+from organization.models import UserToOrganization, STATUS_CHECKING, ROLE_WORKER, ROLE_CLIENT, ROLE_OWNER
 from .utils import generate_password, generate_user_email
 from .validators import validate_phone
 
@@ -17,6 +18,20 @@ CHANGE_PASSWORD_URL = "https://kk.keyman24.ru/change-password"
 
 
 class UserManager(_UserManager):
+
+    def get_users(self, user, change=False):
+        if user.is_anonymous:
+            return self.all()
+        users_id = []
+        exclude_ids = []
+        for uto in UserToOrganization.objects.exclude(status=STATUS_CHECKING).filter(user=user):
+            if uto.role in [ROLE_WORKER]:
+                users_id.append(uto.user_id)
+            else:
+                users_id = [*users_id, *UserToOrganization.objects.exclude(status=STATUS_CHECKING).filter(org_id=uto.org_id).values_list("user_id", flat=True)]
+            if uto.role in [ROLE_CLIENT] and change:
+                exclude_ids = [*exclude_ids, *UserToOrganization.objects.exclude(status=STATUS_CHECKING).filter(org_id=uto.org_id, role=ROLE_OWNER).values_list("user_id", flat=True)]
+        return self.filter(id__in=users_id)
 
     def _create_user(self, email=None, password=None, **extra_fields):
         email = self.normalize_email(email)

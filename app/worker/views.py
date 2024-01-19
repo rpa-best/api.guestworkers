@@ -1,13 +1,15 @@
 import pandas as pd
-from django.db.models import Q
-from rest_framework.viewsets import ModelViewSet
-from rest_framework.generics import CreateAPIView
+from django.utils.translation import gettext_lazy as _
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
+from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView
 from rest_framework.response import Response
 from rest_pandas.views import PandasView
 from core.utils.renderers import PandasExcelRenderer
-from organization.models import UserToOrganization, STATUS_CHECKING, ROLE_WORKER
+from organization.models import ROLE_OWNER, ROLE_CLIENT, UserToOrganization
+from organization.permissions import has_permission
+from organization.serializers import WorkerToOrganizationUpdateSerializer
 from oauth.models import User
-from . import serializers
+from . import serializers, models
 
 
 class UploadInstanceView(PandasView):
@@ -22,24 +24,28 @@ class UploadInstanceView(PandasView):
 class UploadCheckView(CreateAPIView):
     serializer_class = serializers.UploadCheckSerializer
 
+    def check_permissions(self, request):
+        return has_permission(None, request.user, [ROLE_OWNER, ROLE_CLIENT])
+
 
 class UploadPerformView(CreateAPIView):
     serializer_class = serializers.UploadPerformSerializer
 
+    def check_permissions(self, request):
+        return has_permission(None, request.user, [ROLE_OWNER, ROLE_CLIENT])
+
+
+class DocTypeView(ReadOnlyModelViewSet):
+    serializer_class = serializers.DocTypeSerializer
+    queryset = models.DocType.objects.all()
+
 
 class WorkerView(ModelViewSet):
+    http_method_names = ["get", "head", "patch", "post", "delete"]
 
     def get_queryset(self):
         user = self.request.user
-        if user.is_anonymous:
-            return User.objects.all()
-        users_id = []
-        for uto in UserToOrganization.objects.exclude(status=STATUS_CHECKING).filter(user=user):
-            if uto.role in [ROLE_WORKER]:
-                users_id.append(uto.user_id)
-            else:
-                users_id = [*users_id, *UserToOrganization.objects.exclude(status=STATUS_CHECKING).filter(org_id=uto.org_id).values_list("user_id", flat=True)]
-        return User.objects.filter(id__in=users_id)
+        return User.objects.get_users(user)
     
     def get_serializer_class(self):
         if self.action in ["list"]:
@@ -49,4 +55,40 @@ class WorkerView(ModelViewSet):
         elif self.action in ["create"]:
             return serializers.WorkerCreateSerializer
         return serializers.WorkerRetriveSerializer
-            
+    
+    def create(self, request, *args, **kwargs):
+        if not has_permission(None, request.user, [ROLE_OWNER, ROLE_CLIENT]):
+            self.permission_denied(request)
+        return super().create(request, *args, **kwargs)
+
+
+class WorkerToUserUpdateView(RetrieveUpdateAPIView):
+    http_method_names = ["get", "head", "patch"]
+
+    def get_serializer_class(self):
+        if self.request.method == "PATCH":
+            return WorkerToOrganizationUpdateSerializer
+        return serializers.WorkerToOrganizationSerializer
+
+    def get_queryset(self):
+        return UserToOrganization.objects.filter(user__in=User.objects.get_users(self.request.user, self.request.method == "PATCH"))
+    
+    def update(self, request, *args, **kwargs):
+        request.data.update(user=self.kwargs.get("worker_id"))
+        return super().update(request, *args, **kwargs)
+    
+
+class WorkerDocUpdateView(RetrieveUpdateAPIView):
+    http_method_names = ["get", "head", "patch"]
+
+    def get_serializer_class(self):
+        if self.request.method == "PATCH":
+            return serializers.WorkerDocUpdateSerializer
+        return serializers.WorkerDocShowSerializer
+    
+    def get_queryset(self):
+        return models.WorkerDoc.objects.filter(user__in=User.objects.get_users(self.request.user, self.request.method == "PATCH"))
+    
+    def update(self, request, *args, **kwargs):
+        request.data.update(user=self.kwargs.get("worker_id"))
+        return super().update(request, *args, **kwargs)
