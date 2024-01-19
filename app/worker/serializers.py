@@ -152,7 +152,7 @@ class WorkerListSerializer(serializers.ModelSerializer):
 
     @extend_schema_field(WorkerDocShowSerializer(many=True)) 
     def get_docs(self, obj: User):
-        return WorkerDocShowSerializer(WorkerDoc.objects.filter(user=obj, main=True), many=True).data
+        return WorkerDocShowSerializer(WorkerDoc.objects.filter(user=obj, type__main=True), many=True).data
 
 
 class WorkerRetriveSerializer(serializers.ModelSerializer):
