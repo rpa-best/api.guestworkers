@@ -1,9 +1,8 @@
 from django.db import models
-from django.contrib.auth import get_user_model
+from django.conf import settings
 from django.core.validators import MaxLengthValidator, MinLengthValidator
 from django.utils.translation import gettext_lazy as _
 
-User = get_user_model()
 
 class Organization(models.Model):
     name = models.CharField("Название", max_length=255, blank=True, null=True)
@@ -43,7 +42,7 @@ ROLES = (
 
 class UserToOrganization(models.Model):
     org = models.ForeignKey(Organization, models.CASCADE, verbose_name=_('Организация'))
-    user = models.ForeignKey(User, models.CASCADE, verbose_name=_('Пользовател'))
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, models.CASCADE, verbose_name=_('Пользовател'))
     status = models.CharField(max_length=20, choices=STATUS, null=True, verbose_name=_('Статус'))
     role = models.CharField(max_length=20, choices=ROLES, default=ROLE_WORKER, verbose_name=_('Роль'))
     
