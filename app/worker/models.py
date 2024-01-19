@@ -19,6 +19,14 @@ DEFAULT_DOC_TYPES = [
     {'slug': 'jitelstvo_o', 'name': 'Вид на жительство до'},
     {'slug': 'potent_do', 'name': 'патент до'},
 ]
+DOC_STATUS_NORM = "norm"
+DOC_STATUS_EXPIRED = "expired"
+DOC_STATUS_SOON_EXPIRED = "soon_expired"
+DOC_STATUS = (
+    (DOC_STATUS_EXPIRED, DOC_STATUS_EXPIRED),
+    (DOC_STATUS_SOON_EXPIRED, DOC_STATUS_SOON_EXPIRED),
+    (DOC_STATUS_NORM, DOC_STATUS_NORM),
+)
 User = get_user_model()
 
 
@@ -40,11 +48,15 @@ class WorkerDoc(models.Model):
     
     @property
     def is_expired(self):
+        if not self.expired_date:
+            return False
         now = timezone.now().date()
         return self.expired_date < now
     
     @property
     def is_soon_expired(self):
+        if not self.expired_date:
+            return False
         now = timezone.now()
         date = (now - SOON_EXPIRE_LIMIT).date()
         return self.expired_date <= date

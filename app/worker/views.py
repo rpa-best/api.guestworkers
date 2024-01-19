@@ -9,7 +9,7 @@ from organization.models import ROLE_OWNER, ROLE_CLIENT, UserToOrganization
 from organization.permissions import has_permission
 from organization.serializers import WorkerToOrganizationUpdateSerializer
 from oauth.models import User
-from . import serializers, models
+from . import serializers, models, filters
 
 
 class UploadInstanceView(PandasView):
@@ -38,10 +38,15 @@ class UploadPerformView(CreateAPIView):
 class DocTypeView(ReadOnlyModelViewSet):
     serializer_class = serializers.DocTypeSerializer
     queryset = models.DocType.objects.all()
+    permission_classes = None
+    filterset_class = filters.DocTypeFilter
+    search_fields = ["name"]
 
 
 class WorkerView(ModelViewSet):
     http_method_names = ["get", "head", "patch", "post", "delete"]
+    filterset_class = filters.WorkerFilter
+    search_fields = ["first_name", "last_name", "surname", "passport"]
 
     def get_queryset(self):
         user = self.request.user
@@ -64,6 +69,7 @@ class WorkerView(ModelViewSet):
 
 class WorkerToUserUpdateView(ModelViewSet):
     http_method_names = ["get", "head", "patch"]
+    pagination_class = None
 
     def get_serializer_class(self):
         if self.action == "partial_update":
@@ -79,7 +85,9 @@ class WorkerToUserUpdateView(ModelViewSet):
     
 
 class WorkerDocUpdateView(ModelViewSet):
-    http_method_names = ["get", "head", "patch", "create"]
+    http_method_names = ["get", "head", "patch", "post"]
+    pagination_class = None
+    filterset_class = filters.WorkerDocFilter
 
     def get_serializer_class(self):
         if self.action in ["partial_update", "create"]:

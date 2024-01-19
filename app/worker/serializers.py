@@ -1,6 +1,6 @@
 import datetime
 import pandas as pd
-from drf_spectacular.utils import extend_schema_field
+from drf_spectacular.utils import extend_schema_field, extend_schema_serializer
 from rest_framework import serializers
 from rest_framework.exceptions import PermissionDenied
 from django.core.validators import FileExtensionValidator
@@ -137,6 +137,8 @@ class DocTypeSerializer(serializers.ModelSerializer):
 
 class WorkerDocShowSerializer(serializers.ModelSerializer):
     type = DocTypeSerializer()
+    is_expired = serializers.DateField(source="is_expired")
+    is_soon_expired = serializers.DateField(source="is_soon_expired")
 
     class Meta:
         model = WorkerDoc
@@ -193,10 +195,10 @@ class WorkerCreateSerializer(serializers.ModelSerializer):
         return User.objects.create_user(**validated_data, _send_email=validated_data.get("email"))
 
 
+@extend_schema_serializer(exclude_fields=["user"])
 class WorkerDocUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WorkerDoc
         fields = "__all__"
         read_only_fields = ["start_date"]
-        
