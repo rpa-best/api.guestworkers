@@ -8,6 +8,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.utils.translation import gettext_lazy as _
 from rest_framework_simplejwt.utils import aware_utcnow
 from rest_framework import exceptions
+from simple_history.models import HistoricalRecords
 from core.utils.email import send_email
 from organization.models import UserToOrganization, STATUS_CHECKING, ROLE_WORKER, ROLE_CLIENT, ROLE_OWNER
 from .utils import generate_password, generate_user_email
@@ -74,6 +75,7 @@ class User(AbstractUser):
     USERNAME_FIELD = 'email'
 
     objects = UserManager()
+    history = HistoricalRecords()
 
     def __str__(self) -> str:
         name = []

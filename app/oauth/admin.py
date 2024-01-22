@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as _UserAdmin
 from django.utils.translation import gettext_lazy as _
+from simple_history.admin import SimpleHistoryAdmin
 from worker.models import WorkerDoc
 from .models import User
 
@@ -13,7 +14,7 @@ class WorkerDocInline(admin.TabularInline):
 
 
 @admin.register(User)
-class UserAdmin(_UserAdmin):
+class UserAdmin(SimpleHistoryAdmin, _UserAdmin):
     fieldsets = (
         (None, {"fields": ("email", "password")}),
         (_("Personal info"), {"fields": ("first_name", "last_name", "surname", "phone")}),

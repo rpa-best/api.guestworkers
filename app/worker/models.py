@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
+from simple_history.models import HistoricalRecords
 
 SOON_EXPIRE_LIMIT = timezone.timedelta(days=5)
 UPLOAD_KWARGS_PASSPORT = 'Серия, номер паспорта'
@@ -45,7 +46,8 @@ class WorkerDoc(models.Model):
     start_date = models.DateField(null=True, blank=True)
     expired_date = models.DateField(null=True, blank=True)
     file = models.FileField(upload_to="user-docs", null=True, blank=True)
-    
+    history = HistoricalRecords()
+
     @property
     def is_expired(self):
         if not self.expired_date:

@@ -6,6 +6,7 @@ djangorestframework-simplejwt==5.2.0
 django-cors-headers==3.13.0
 djangochannelsrestframework==1.1.0
 django-celery-results
+django-simple-history
 drf-spectacular==0.24.1
 django-celery-beat
 gunicorn==20.1.0

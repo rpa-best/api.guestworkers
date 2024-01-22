@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.core.validators import MaxLengthValidator, MinLengthValidator
 from django.utils.translation import gettext_lazy as _
+from simple_history.models import HistoricalRecords
 
 
 class Organization(models.Model):
@@ -21,6 +22,9 @@ class Organization(models.Model):
     gen_name = models.CharField(max_length=255, blank=True, null=True)
     r_s = models.CharField(max_length=255, blank=True, null=True)
     k_s = models.CharField(max_length=255, blank=True, null=True)
+    has_skud = models.BooleanField(default=False)
+
+    history = HistoricalRecords()
 
     class Meta:
         verbose_name = "Организация"

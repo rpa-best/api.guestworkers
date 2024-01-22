@@ -10,7 +10,8 @@ PASSWORD = os.getenv("FTP_HOST_PASSWORD")
 def get_workers():
     with FTP(HOST, USER, PASSWORD) as ftp:
         ftp.cwd('/httpdocs/upload/csv1c/back/')
-        file_name = sorted(filter(lambda x: str(x).endswith('.csv'), ftp.nlst()), key=lambda x: ftp.voidcmd(f"MDTM {x}"))[-1]
+        # file_name = sorted(filter(lambda x: str(x).endswith('.csv'), ftp.nlst()), key=lambda x: ftp.voidcmd(f"MDTM {x}"))[-1]
+        file_name = 'sotrudniki.csv'
         with io.BytesIO() as file:
             ftp.retrbinary(f'RETR {file_name}', file.write)
             df = pd.read_csv(io.StringIO(file.getvalue().decode()), sep=';', encoding='utf8')
