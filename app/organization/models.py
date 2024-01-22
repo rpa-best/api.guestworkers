@@ -1,17 +1,12 @@
 from django.db import models
 from django.conf import settings
-from django.core.validators import MaxLengthValidator, MinLengthValidator
 from django.utils.translation import gettext_lazy as _
 from simple_history.models import HistoricalRecords
 
 
 class Organization(models.Model):
     name = models.CharField("Название", max_length=255, blank=True, null=True)
-    inn = models.CharField("ИНН", max_length=20, primary_key=True,
-                           validators=[
-                               MinLengthValidator(8, 'Неправильный ИНН'),
-                               MaxLengthValidator(10, 'Неправильный ИНН'),
-                           ])
+    inn = models.CharField("ИНН", max_length=20, primary_key=True)
     bik = models.CharField("ВИК", max_length=255, blank=True, null=True)
     address = models.CharField("Адрес", max_length=255, blank=True, null=True)
     phone = models.CharField("Телефон", max_length=20, blank=True, null=True)

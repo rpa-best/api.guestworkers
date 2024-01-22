@@ -7,6 +7,7 @@ class UserToOrganizationInline(admin.TabularInline):
     extra = 0
     model = UserToOrganization
     show_change_link = True
+    raw_id_fields = ("user",)
 
 
 @admin.register(Organization)

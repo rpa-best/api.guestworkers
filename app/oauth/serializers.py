@@ -1,6 +1,5 @@
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
-from django.core.validators import MaxLengthValidator, MinLengthValidator
 from rest_framework import serializers, exceptions
 from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.tokens import RefreshToken 
@@ -105,11 +104,6 @@ class CreateUserLegalSerializer(serializers.Serializer):
     def validate_email(self, value):
         if User.objects.filter(email=value).exists():
             raise exceptions.ValidationError([_('User with the given credentials already exists')])
-        return value
-    
-    def validate_inn(self, value):
-        MaxLengthValidator(10, 'Неправильный ИНН')(value)
-        MinLengthValidator(8, 'Неправильный ИНН')(value)
         return value
 
     def validate(self, attrs):
