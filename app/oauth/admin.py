@@ -11,6 +11,13 @@ admin.site.site_header = "Капитал кадри"
 class WorkerDocInline(admin.TabularInline):
     model = WorkerDoc
     extra = 0
+    non_editable_fields = ['type']
+
+    def get_fields(self, request, obj=None):
+        defaults = super().get_fields(request, obj=obj)
+        if obj: # if we are updating an object
+            defaults = tuple(f for f in defaults if f not in self.non_editable_fields)
+        return defaults
 
 
 @admin.register(User)

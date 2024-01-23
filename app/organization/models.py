@@ -66,4 +66,7 @@ class UserToOrganization(models.Model):
         unique_together = (("org", "user"),)
         verbose_name = "Сотрудник"
         verbose_name_plural = "Сотрудники"
+
+    def __str__(self) -> str:
+        return str(self.user)
     
