@@ -14,6 +14,7 @@ class WorkerDocInline(admin.TabularInline):
     model = WorkerDoc
     extra = 0
     non_editable_fields = ['type']
+    fields = ["type", "start_date", "expired_date", "file"]
 
     def get_readonly_fields(self, request, obj=None):
         defaults = super().get_readonly_fields(request, obj)

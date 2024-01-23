@@ -45,12 +45,12 @@ class DocType(models.Model):
 
 
 class WorkerDoc(models.Model):
-    user = models.ForeignKey(User, models.CASCADE)
-    type = models.ForeignKey(DocType, models.SET_NULL, null=True, to_field="slug")
-    create_date = models.DateField(auto_now_add=True)
-    start_date = models.DateField(null=True, blank=True)
-    expired_date = models.DateField(null=True, blank=True)
-    file = models.FileField(upload_to="user-docs", null=True, blank=True)
+    user = models.ForeignKey(User, models.CASCADE, verbose_name="Пользовател")
+    type = models.ForeignKey(DocType, models.SET_NULL, null=True, to_field="slug", verbose_name="Тип документа")
+    create_date = models.DateField(auto_now_add=True, verbose_name="Дата создание")
+    start_date = models.DateField(null=True, blank=True, verbose_name="Дата начало")
+    expired_date = models.DateField(null=True, blank=True, verbose_name="Дата окончание")
+    file = models.FileField(upload_to="user-docs", null=True, blank=True, verbose_name="Файл")
     history = HistoricalRecords()
 
     @property
