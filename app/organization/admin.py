@@ -8,7 +8,7 @@ class UserToOrganizationInline(CompactInline):
     extra = 0
     model = UserToOrganization
     show_change_link = True
-    raw_id_fields = ("user",)
+    autocomplete_fields = ("user",)
 
 
 @admin.register(Organization)
