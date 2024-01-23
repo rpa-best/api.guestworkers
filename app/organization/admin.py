@@ -1,9 +1,10 @@
 from django.contrib import admin
 from simple_history.admin import SimpleHistoryAdmin
+from jet.admin import CompactInline
 from .models import Organization, UserToOrganization
 
 
-class UserToOrganizationInline(admin.TabularInline):
+class UserToOrganizationInline(CompactInline):
     extra = 0
     model = UserToOrganization
     show_change_link = True
