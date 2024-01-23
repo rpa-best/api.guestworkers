@@ -1,7 +1,5 @@
-from typing import Any, List, Tuple
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as _UserAdmin
-from django.http.request import HttpRequest
 from django.utils.translation import gettext_lazy as _
 from simple_history.admin import SimpleHistoryAdmin
 from worker.models import WorkerDoc
@@ -13,14 +11,6 @@ admin.site.site_header = "Капитал кадри"
 class WorkerDocInline(admin.TabularInline):
     model = WorkerDoc
     extra = 0
-    non_editable_fields = ['type']
-    fields = ["type", "start_date", "expired_date", "file"]
-
-    def get_readonly_fields(self, request, obj=None):
-        defaults = super().get_readonly_fields(request, obj)
-        if obj: # if we are updating an object
-            defaults = [*defaults, *self.non_editable_fields]
-        return defaults
 
 
 @admin.register(User)

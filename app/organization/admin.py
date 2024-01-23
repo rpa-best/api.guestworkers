@@ -9,14 +9,6 @@ class UserToOrganizationInline(CompactInline):
     model = UserToOrganization
     show_change_link = True
     raw_id_fields = ("user",)
-    non_editable_fields = ['user']
-    fields = ["user", "status", "role"]
-
-    def get_readonly_fields(self, request, obj=None):
-        defaults = super().get_readonly_fields(request, obj)
-        if obj: # if we are updating an object
-            defaults = [*defaults, *self.non_editable_fields]
-        return defaults
 
 
 @admin.register(Organization)
