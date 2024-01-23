@@ -97,6 +97,10 @@ class User(AbstractUser):
         url = f"{CHANGE_PASSWORD_URL}?uuid={uuid.uuid}"
         return send_email(self.email, _('Reset password'), url)
 
+    @staticmethod
+    def autocomplete_search_fields():
+        return ["email", "first_name", "last_name", "surname"]
+
 
 class ChangePasswordUUID(models.Model):
     uuid = models.UUIDField(default=uuid4, primary_key=True)
