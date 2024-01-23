@@ -14,7 +14,7 @@ class UserToOrganizationInline(CompactInline):
     def get_readonly_fields(self, request, obj=None):
         defaults = super().get_readonly_fields(request, obj)
         if obj: # if we are updating an object
-            defaults = tuple(f for f in defaults if f in self.non_editable_fields)
+            defaults = [*defaults, *self.non_editable_fields]
         return defaults
 
 
