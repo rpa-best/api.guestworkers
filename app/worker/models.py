@@ -38,6 +38,11 @@ class DocType(models.Model):
 
     def __str__(self) -> str:
         return self.name
+    
+    class Meta:
+        verbose_name = "Тип документа"
+        verbose_name_plural = "Тип документов"
+
 
 class WorkerDoc(models.Model):
     user = models.ForeignKey(User, models.CASCADE)

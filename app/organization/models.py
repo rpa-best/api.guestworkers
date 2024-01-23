@@ -12,12 +12,12 @@ class Organization(models.Model):
     phone = models.CharField("Телефон", max_length=20, blank=True, null=True)
     ogrn = models.CharField("ОГРН", max_length=20, blank=True, null=True)
     kpp = models.CharField("КПП", max_length=20, blank=True, null=True)
-    email = models.EmailField(blank=True, null=True)
-    phone_name = models.CharField(max_length=255, blank=True, null=True)
-    gen_name = models.CharField(max_length=255, blank=True, null=True)
-    r_s = models.CharField(max_length=255, blank=True, null=True)
-    k_s = models.CharField(max_length=255, blank=True, null=True)
-    has_skud = models.BooleanField(default=False)
+    email = models.EmailField(blank=True, null=True, verbose_name="Почта")
+    phone_name = models.CharField(max_length=255, blank=True, null=True, verbose_name="Контактное лицо")
+    gen_name = models.CharField(max_length=255, blank=True, null=True, verbose_name="Генеральный директор")
+    r_s = models.CharField(max_length=255, blank=True, null=True, verbose_name="р/с")
+    k_s = models.CharField(max_length=255, blank=True, null=True, verbose_name="к/с")
+    has_skud = models.BooleanField(default=False, verbose_name="СКУД")
 
     history = HistoricalRecords()
 

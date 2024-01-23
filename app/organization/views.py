@@ -29,6 +29,8 @@ class OrganizationView(ModelViewSet):
 class OrganizationApiView(ListAPIView):
     pagination_class = None
     serializer_class = OrganizationShortSerializer
+    authentication_classes = ()
+    permission_classes = ()
 
     def list(self, request, *args, **kwargs):
         org_data = inn_check_api_validator(self.kwargs.get("inn"), True)
