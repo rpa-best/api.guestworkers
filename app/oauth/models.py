@@ -67,7 +67,7 @@ class UserManager(_UserManager):
 class User(AbstractUser):
     email = models.EmailField(_("email address"), unique=True)
     phone = models.CharField(_("phone"), blank=True, null=True, validators=[validate_phone], max_length=255)
-    surname = models.CharField(_("name"), blank=True, null=True, max_length=255)
+    surname = models.CharField(_("surname"), blank=True, null=True, max_length=255)
     passport = models.CharField(_('passport'), blank=True, null=True, max_length=255, unique=True)
     username = None
 

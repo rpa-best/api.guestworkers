@@ -17,7 +17,7 @@ class WorkerDocInline(admin.TabularInline):
 class UserAdmin(SimpleHistoryAdmin, _UserAdmin):
     fieldsets = (
         (None, {"fields": ("email", "password")}),
-        (_("Personal info"), {"fields": ("first_name", "last_name", "surname", "phone")}),
+        (_("Personal info"), {"fields": ("first_name", "last_name", "surname", "phone", "passport")}),
         (
             _("Permissions"),
             {
@@ -45,3 +45,4 @@ class UserAdmin(SimpleHistoryAdmin, _UserAdmin):
     ordering = ("email",)
     inlines = [WorkerDocInline]
     search_fields = User.autocomplete_search_fields()
+    readonly_fields = ["date_joined", "last_login"]

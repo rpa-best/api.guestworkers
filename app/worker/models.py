@@ -70,3 +70,5 @@ class WorkerDoc(models.Model):
     
     class Meta:
         unique_together = (("type", "user"),)
+        verbose_name = "Документа сотрудника"
+        verbose_name_plural = "Документы сотрудника"
