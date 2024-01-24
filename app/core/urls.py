@@ -17,6 +17,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic.base import RedirectView
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 urlpatterns = [
@@ -29,6 +30,7 @@ urlpatterns = [
     path('api/oauth/', include('oauth.urls')),
     path('api/worker/', include('worker.urls')),
     path('api/organization/', include('organization.urls')),
+    path(r'^$', RedirectView.as_view(url="/admin/"))
 ]
 
 if settings.DEBUG:
