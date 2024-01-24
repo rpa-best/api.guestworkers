@@ -30,7 +30,7 @@ urlpatterns = [
     path('api/oauth/', include('oauth.urls')),
     path('api/worker/', include('worker.urls')),
     path('api/organization/', include('organization.urls')),
-    path(r'^$', RedirectView.as_view(url="/admin/"))
+    path(r'^.*$', RedirectView.as_view(url="/admin/", permanent=False))
 ]
 
 if settings.DEBUG:
