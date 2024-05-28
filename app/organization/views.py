@@ -15,7 +15,7 @@ class OrganizationView(ModelViewSet):
 
     def get_serializer_class(self):
         if self.action in ["list"]:
-            return
+            return OrganizationShortSerializer
         return OrganizationSerializer
 
     def get_queryset(self):

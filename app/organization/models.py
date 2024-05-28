@@ -38,7 +38,7 @@ class Organization(models.Model):
             orgs_id.append(uto.org_id)
             if uto.role in [ROLE_WORKER] and change:
                 exclude_ids.append(uto.org_id)
-        return cls.objects.filter(id__in=orgs_id).exclude(id__in=exclude_ids)
+        return cls.objects.filter(inn__in=orgs_id).exclude(inn__in=exclude_ids)
 
 STATUS_CHECKING = 'checking'
 STATUS_DONE = 'done'
