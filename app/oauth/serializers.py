@@ -22,7 +22,7 @@ class AccountSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["first_name", "last_name", "surname", "phone", "email"]
+        fields = ["id", "first_name", "last_name", "surname", "phone", "email"]
 
 
 class ChangePasswordSerializer(serializers.Serializer):
@@ -130,10 +130,10 @@ class CreateUserLegalSerializer(serializers.Serializer):
         user = User.objects.create_user(email=email, phone=phone)
         org, created = Organization.objects.get_or_create(
             inn=inn,
-            address = org['a'],
-            name = org['c'],
-            ogrn = org['o'],
-            kpp = org['p'],
+            address = org.get('a'),
+            name =org.get('c'),
+            ogrn = org.get('o'),
+            kpp = org.get('p'),
         )
         UserToOrganization.objects.create(
             org=org, user=user, status=STATUS_CHECKING, role=ROLE_OWNER
