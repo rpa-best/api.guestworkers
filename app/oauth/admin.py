@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as _UserAdmin
 from django.utils.translation import gettext_lazy as _
 from simple_history.admin import SimpleHistoryAdmin
+from organization.models import UserToOrganization
 from worker.models import WorkerDoc
 from .models import User
 
@@ -12,6 +13,13 @@ class WorkerDocInline(admin.TabularInline):
     model = WorkerDoc
     extra = 0
 
+
+class UserToOrganizationInline(admin.TabularInline):
+    extra = 0
+    model = UserToOrganization
+    show_change_link = True
+    verbose_name = "Организация"
+    verbose_name_plural = "Организации"
 
 @admin.register(User)
 class UserAdmin(SimpleHistoryAdmin, _UserAdmin):
@@ -43,6 +51,6 @@ class UserAdmin(SimpleHistoryAdmin, _UserAdmin):
     )
     list_display = ("email", "first_name", "last_name", "surname", "is_staff")
     ordering = ("email",)
-    inlines = [WorkerDocInline]
+    inlines = [WorkerDocInline, UserToOrganizationInline]
     search_fields = User.autocomplete_search_fields()
     readonly_fields = ["date_joined", "last_login"]

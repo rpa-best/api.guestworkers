@@ -11,16 +11,6 @@ services:
     env_file: ./app/.env
     volumes:
       - ./app/:/app/
-    depends_on:
-      - kk_db
-
-  kk_db:
-    image: postgis/postgis:latest
-    volumes:
-      - ./postgres_data:/var/lib/postgresql/data
-    restart: always
-    container_name: kk_db
-    env_file: ./app/.env
 
   kk_redis:
     container_name: kk_redis

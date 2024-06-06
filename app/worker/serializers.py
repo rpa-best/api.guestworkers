@@ -23,6 +23,7 @@ def genereate_upload_instance():
     for doc_type in DocType.objects.filter(main=True):
         user[doc_type.name] = "01.01.2024"
     data.append(user)
+    return data
 
 
 class UploadCheckSerializer(serializers.Serializer):
