@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers, exceptions
@@ -127,20 +128,21 @@ class CreateUserLegalSerializer(serializers.Serializer):
         org: dict = validated_data.get('org_api')
         email = validated_data.get('email')
         phone = validated_data.get('phone')
-        user = User.objects.create_user(email=email, phone=phone)
-        org, created = Organization.objects.get_or_create(
-            inn=inn,
-            address = org.get('a'),
-            name =org.get('c'),
-            ogrn = org.get('o'),
-            kpp = org.get('p'),
-        )
-        UserToOrganization.objects.create(
-            org=org, user=user, status=STATUS_CHECKING, role=ROLE_OWNER
-        )
-        token = RefreshToken().for_user(user)
-        return {
-            'message': _('Invite created'),
-            'access': str(token.access_token),
-            'refresh': str(token),
-        }
+        with transaction.atomic():
+            user = User.objects.create_user(email=email, phone=phone)
+            org, created = Organization.objects.get_or_create(
+                inn=inn,
+                address = org.get('a'),
+                name =org.get('c'),
+                ogrn = org.get('o'),
+                kpp = org.get('p'),
+            )
+            UserToOrganization.objects.create(
+                org=org, user=user, status=STATUS_CHECKING, role=ROLE_OWNER
+            )
+            token = RefreshToken().for_user(user)
+            return {
+                'message': _('Invite created'),
+                'access': str(token.access_token),
+                'refresh': str(token),
+            }
