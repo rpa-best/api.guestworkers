@@ -15,7 +15,7 @@ from .utils import generate_password, generate_user_email
 from .validators import validate_phone
 
 
-CHANGE_PASSWORD_URL = "https://kk.keyman24.ru/change-password"
+CHANGE_PASSWORD_URL = "http://95.142.38.166:3050/new-password/"
 
 
 class UserManager(_UserManager):
