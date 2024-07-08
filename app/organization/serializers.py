@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from drf_spectacular.utils import extend_schema_field
-from .models import Organization, UserToOrganization
+from .models import Organization, UserToOrganization, ROLE_CLIENT, STATUS_CHECKING
 
 
 class OrganizationShortSerializer(serializers.ModelSerializer):
@@ -14,6 +14,10 @@ class OrganizationSerializer(serializers.ModelSerializer):
         model = Organization
         fields = "__all__"
 
+    def create(self, validated_data):
+        instance: Organization = super().create(validated_data)
+        UserToOrganization.objects.create(user=self.context["request"].user, org=instance, status=STATUS_CHECKING, role=ROLE_CLIENT)
+        return instance
 
 class OrganizationListSerializer(serializers.ModelSerializer):
     count_workers = serializers.SerializerMethodField()
