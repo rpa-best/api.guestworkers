@@ -13,7 +13,7 @@ UPLOAD_KWARGS = (
     ('passport', UPLOAD_KWARGS_PASSPORT, "99 99 999999"),
 )
 DEFAULT_DOC_TYPES = [
-    {'slug': 'chek_do', 'name': 'Чек до'},
+    {'slug': 'chek_do', 'name': 'Чек до '},
     {'slug': 'polis_oms_do', 'name': 'Полис ОМС до'},
     {'slug': 'polis_dms_do', 'name': 'Полис ДМС до'},
     {'slug': 'projivanie_do', 'name': 'Разрешение на временное проживание до'},

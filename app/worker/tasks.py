@@ -18,6 +18,7 @@ def update_workers_from_onec():
     inn = 'ИНН подразделения'
     org_name = 'подразделение'
     workers_data = get_workers()
+    passports = []
     for row in workers_data:
         worker_fio = row.get(fio, "")
         last_name, first_name, surname = parse_fio(worker_fio)
@@ -66,3 +67,5 @@ def update_workers_from_onec():
                 "role": ROLE_WORKER,
             }, org=worker_org, user=user
         )
+        passports.append(user.passport)
+    User.objects.exclude(passport__in=passports).delete()

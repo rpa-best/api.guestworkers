@@ -28,7 +28,7 @@ def genereate_upload_instance():
 
 class UploadCheckSerializer(serializers.Serializer):
     inn = serializers.SlugRelatedField("inn", queryset=Organization.objects, write_only=True)
-    xlsx = serializers.FileField(validators=[FileExtensionValidator(["xlsx"])], write_only=True)
+    xlsx = serializers.FileField(validators=[FileExtensionValidator(["xlsx", "xls"])], write_only=True)
     results = serializers.ListField(read_only=True)
     org = OrganizationShortSerializer(read_only=True)
 
