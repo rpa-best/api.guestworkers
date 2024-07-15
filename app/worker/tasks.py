@@ -2,6 +2,7 @@ import datetime
 from celery import shared_task
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model
+from django.db.models import Q
 from oauth.utils import parse_fio
 from organization.models import Organization, UserToOrganization, STATUS_DONE, ROLE_WORKER, ROLE_OWNER, ROLE_CLIENT
 from organization.validators import inn_check_api_validator
@@ -68,4 +69,4 @@ def update_workers_from_onec():
             }, org=worker_org, user=user
         )
         passports.append(user.passport)
-    User.objects.exclude(passport__in=passports, is_superuser=True, usertoorganization__role__in=[ROLE_OWNER, ROLE_CLIENT]).delete()
+    User.objects.exclude(Q(passport__in=passports) | Q(is_superuser=True) | Q(usertoorganization__role__in=[ROLE_OWNER, ROLE_CLIENT])).delete()
