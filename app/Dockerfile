@@ -2,6 +2,7 @@ FROM python:3.9
 ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 COPY requirements.txt /app/
+RUN apt-get clean
 RUN apt-get update
 RUN apt-get -y install libev-dev libnss3 locales-all
 RUN pip install --upgrade pip

@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from drf_spectacular.utils import extend_schema_field
-from .models import Organization, UserToOrganization, ROLE_CLIENT, STATUS_CHECKING
+from drf_spectacular.utils import extend_schema_field, extend_schema_serializer
+from .models import Organization, UserToOrganization, ROLE_CLIENT, STATUS_CHECKING, OrganizationDoc, OrganizationTabel
 
 
 class OrganizationShortSerializer(serializers.ModelSerializer):
@@ -42,3 +42,20 @@ class WorkerToOrganizationUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserToOrganization
         fields = ["role"]
+
+
+@extend_schema_serializer(exclude_fields=["user", "org"])
+class OrganizationDocSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = OrganizationDoc
+        fields = "__all__"
+
+
+@extend_schema_serializer(exclude_fields=["org"])
+class OrganizationTabelSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = OrganizationTabel
+        fields = "__all__"
+        read_only_fields = ["editable"]

@@ -1,9 +1,10 @@
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import ListAPIView
-from .serializers import OrganizationSerializer, OrganizationShortSerializer
-from .models import Organization
+from .serializers import OrganizationSerializer, OrganizationShortSerializer, OrganizationDocSerializer, OrganizationTabelSerializer
+from .models import Organization, OrganizationDoc, OrganizationTabel
 from .validators import inn_check_api_validator
+from .filters import OrganizationTabelFilter
 
 
 class OrganizationView(ModelViewSet):
@@ -41,3 +42,34 @@ class OrganizationApiView(ListAPIView):
             "address": org.get('a'),
             "kpp": org.get('p'),
         } for org in org_data])
+
+
+class OrganizationDocView(ModelViewSet):
+    http_method_names = ["get", "post"]
+    serializer_class = OrganizationDocSerializer
+    pagination_class = None
+    
+    def get_queryset(self):
+        return OrganizationDoc.objects.filter(org_id=self.kwargs.get("inn"))
+
+    def create(self, request, *args, **kwargs):
+        request.data.update(user=self.request.user.id, org=self.kwargs.get("inn"))
+        return super().create(request, *args, **kwargs)
+
+
+class OrganizationTableView(ModelViewSet):
+    http_method_names = ["get", "post", "patch"]
+    serializer_class = OrganizationTabelSerializer
+    pagination_class = None
+    filterset_class = OrganizationTabelFilter
+
+    def get_queryset(self):
+        return OrganizationTabel.objects.filter(org_id=self.kwargs.get("inn"))
+    
+    def create(self, request, *args, **kwargs):
+        request.data.update(org=self.kwargs.get("inn"))
+        return super().create(request, *args, **kwargs)
+    
+    def update(self, request, *args, **kwargs):
+        request.data.update(org=self.kwargs.get("inn"))
+        return super().update(request, *args, **kwargs)

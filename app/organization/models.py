@@ -70,3 +70,26 @@ class UserToOrganization(models.Model):
     def __str__(self) -> str:
         return str(self.user)
     
+
+class OrganizationDoc(models.Model):
+    org = models.ForeignKey(Organization, models.CASCADE)
+    file = models.FileField(upload_to="orgdocs/")
+    date = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, models.SET_NULL, verbose_name=_('Пользовател'), blank=True, null=True)
+
+    class Meta:
+        verbose_name = "Ведомость"
+        verbose_name_plural = "Ведомости"
+
+
+class OrganizationTabel(models.Model):
+    org = models.ForeignKey(Organization, models.CASCADE)
+    worker = models.ForeignKey(settings.AUTH_USER_MODEL, models.CASCADE)
+    date = models.DateField()
+    value = models.FloatField()
+    editable = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = "Табель"
+        verbose_name_plural = "Табели"
+    
