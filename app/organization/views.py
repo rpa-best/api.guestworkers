@@ -1,6 +1,8 @@
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import ListAPIView
+from drf_spectacular.utils import extend_schema_view, extend_schema
+from django.db.models import Sum
 from .serializers import OrganizationSerializer, OrganizationShortSerializer, OrganizationDocSerializer, OrganizationTabelSerializer
 from .models import Organization, OrganizationDoc, OrganizationTabel
 from .validators import inn_check_api_validator
@@ -73,3 +75,8 @@ class OrganizationTableView(ModelViewSet):
     def update(self, request, *args, **kwargs):
         request.data.update(org=self.kwargs.get("inn"))
         return super().update(request, *args, **kwargs)
+    
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        return Response({"data": serializer.data, "sum": queryset.values("worker").annotate(sum=Sum("value"))})
