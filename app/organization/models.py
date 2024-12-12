@@ -92,4 +92,17 @@ class OrganizationTabel(models.Model):
     class Meta:
         verbose_name = "Табель"
         verbose_name_plural = "Табели"
-    
+
+
+class DocumentType(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self) -> str:
+        return self.name
+
+
+class Document(models.Model):
+    date = models.DateField()
+    org = models.ForeignKey(Organization, models.CASCADE)
+    type = models.ForeignKey(DocumentType, models.CASCADE)
+    file = models.FileField(upload_to="doc/")

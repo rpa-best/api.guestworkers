@@ -1,10 +1,10 @@
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import ListAPIView
-from .serializers import OrganizationSerializer, OrganizationShortSerializer, OrganizationDocSerializer, OrganizationTabelSerializer
-from .models import Organization, OrganizationDoc, OrganizationTabel
+from .serializers import OrganizationSerializer, OrganizationShortSerializer, OrganizationDocSerializer, OrganizationTabelSerializer, DocumentTypeSerializer, DocumentSerializer
+from .models import Organization, OrganizationDoc, OrganizationTabel, Document, DocumentType
 from .validators import inn_check_api_validator
-from .filters import OrganizationTabelFilter
+from .filters import OrganizationTabelFilter, DocumentFilter
 
 
 class OrganizationView(ModelViewSet):
@@ -73,3 +73,18 @@ class OrganizationTableView(ModelViewSet):
     def update(self, request, *args, **kwargs):
         request.data.update(org=self.kwargs.get("inn"))
         return super().update(request, *args, **kwargs)
+
+
+class DocumentView(ListAPIView):
+    serializer_class = DocumentSerializer
+    filterset_class = DocumentFilter
+    pagination_class = None
+
+    def get_queryset(self):
+        return Document.objects.filter(org_id=self.kwargs.get("inn"))
+
+
+class DocumentTypeView(ListAPIView):
+    serializer_class = DocumentTypeSerializer
+    queryset = DocumentType.objects.all()
+    pagination_class = None

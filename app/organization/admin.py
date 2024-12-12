@@ -6,7 +6,7 @@ from rangefilter.filters import (
     DateRangeQuickSelectListFilterBuilder,
 )
 from .resources import OrganizationTabelResource
-from .models import Organization, UserToOrganization, OrganizationDoc, OrganizationTabel
+from .models import Organization, UserToOrganization, OrganizationDoc, OrganizationTabel, Document, DocumentType
 
 
 class UserToOrganizationInline(CompactInline):
@@ -38,3 +38,15 @@ class OrganizationTabelAdmin(ExportActionModelAdmin):
         queryset = super().get_export_queryset(request)
         queryset.update(editable=False)
         return queryset
+
+
+@admin.register(DocumentType)
+class DocumentType(admin.ModelAdmin):
+    list_display = ["name"]
+
+
+@admin.register(Document)
+class DocumentAdmin(admin.ModelAdmin):
+    list_display = ["type", "date", "org"]
+    list_filter = ["org", "type"]
+    

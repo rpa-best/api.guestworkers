@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from drf_spectacular.utils import extend_schema_field, extend_schema_serializer
-from .models import Organization, UserToOrganization, ROLE_CLIENT, STATUS_CHECKING, OrganizationDoc, OrganizationTabel
+from .models import Organization, UserToOrganization, ROLE_CLIENT, STATUS_CHECKING, OrganizationDoc, OrganizationTabel, Document, DocumentType
 
 
 class OrganizationShortSerializer(serializers.ModelSerializer):
@@ -59,3 +59,19 @@ class OrganizationTabelSerializer(serializers.ModelSerializer):
         model = OrganizationTabel
         fields = "__all__"
         read_only_fields = ["editable"]
+
+
+class DocumentTypeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = DocumentType
+        fields = "__all__"
+
+
+class DocumentSerializer(serializers.ModelSerializer):
+    type = DocumentTypeSerializer()
+    org = OrganizationSerializer()
+
+    class Meta:
+        model = Document
+        fields = "__all__"
