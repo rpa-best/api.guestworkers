@@ -197,6 +197,7 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'DATETIME_FORMAT': "%d.%m.%Y %H:%M:%S",
+    'DATE_FORMAT': "%d.%m.%Y",
     'UPDATE_LAST_LOGIN': True
 }
 
