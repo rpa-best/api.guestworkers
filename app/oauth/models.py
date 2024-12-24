@@ -24,7 +24,7 @@ class UserManager(_UserManager):
         if user.is_anonymous:
             return self.all()
         users_id = []
-        exclude_ids = []
+        exclude_ids = [user.id]
         for uto in UserToOrganization.objects.exclude(status=STATUS_CHECKING).filter(user=user):
             if uto.role in [ROLE_WORKER]:
                 users_id.append(uto.user_id)
