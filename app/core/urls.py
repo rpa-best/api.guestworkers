@@ -30,6 +30,7 @@ urlpatterns = [
     path('api/oauth/', include('oauth.urls')),
     path('api/worker/', include('worker.urls')),
     path('api/organization/', include('organization.urls')),
+    path('api/mprofid/', include('mprofid.urls'), name='mprofid'),
     path('*', RedirectView.as_view(url="/admin/", permanent=False))
 ]
 

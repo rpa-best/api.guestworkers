@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'oauth',
     'organization',
     'worker',
+    'mprofid',
 ]
 
 MIDDLEWARE = [
