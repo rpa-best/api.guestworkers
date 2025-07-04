@@ -1,30 +1,22 @@
-from drf_spectacular.utils import extend_schema_serializer
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from .api import Api
-from .models import Order
+from .models import WorkerInvoice
 
 
-@extend_schema_serializer(exclude_fields=['id'])
-class OrderCreateSerializer(serializers.ModelSerializer):
+class WorkerInvoiceShowSerializer(serializers.ModelSerializer):
+    data = serializers.SerializerMethodField()
 
     class Meta:
-        model = Order
+        model = WorkerInvoice
         fields = "__all__"
-
-    def create(self, validated_data):
+    
+    @extend_schema_field(serializers.JSONField())
+    def get_data(self, obj: WorkerInvoice):
         api = Api()
-        response = api.post_order(validated_data)
+        response = api.get_order(obj.id)
         if not response.ok:
-            raise ValidationError(response.text, 'api_error')
-        validated_data['id'] = response.json().get('id')
-        return super().create(validated_data)
-
-
-class OrderShowSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Order
-        fields = ['id', 'fam', 'birthday']
-
+            raise ValidationError(response.json(), 'api_error')
+        return response.json()

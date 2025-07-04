@@ -9,16 +9,20 @@ class Api:
     """
 
     base_url = os.getenv('MPROFID_API_URL')
+    # Order
     GET_ORDER_ID = '/order/{orderId}'
     GET_DIRECTION_ORDER_ID = '/direction/{orderId}'
     POST_ORDER = '/order'
     DELETE_ORDER = '/order/{orderId}'
     GET_NEXT_ORDER = '/order/next'
+    GET_ORDER_STATUS_HISTORY = '/order/statusHistory/{orderId}'
 
     GET_MEDCLIENTS = '/medclients'
     GET_SUBDIVISIONS = '/subdivisions/{medclientId}'
     GET_PROFESSIONS = '/professions/{medclientId}'
 
+    GET_MEDCENTERS = '/dictionary/medCenters'
+    GET_MEDCENTER = '/dictionary/medCenters/{contractID}'
     GET_SERVICES = '/dictionary/services'
     GET_PARTS = '/dictionary/parts'
     GET_MED = '/dictionary/med'
@@ -26,7 +30,7 @@ class Api:
     GET_SURVEY = '/dictionary/survey'
     GET_PAYTYPES = '/dictionary/paytypes'
     GET_HAZARDS = '/dictionary/hazards'
-    GET_CONCLUSIONSTATUS = '/dictionary/conclusionStatus'
+    GET_HAZARDS377 = '/dictionary/hazards377'
 
     def request(self, method, url, **kwargs):
         header = { 'access-token': os.getenv('MPROFID_API_TOKEN') }
@@ -194,8 +198,20 @@ class Api:
         url = self.GET_NEXT_ORDER
         return self.request('GET', url)
 
+    def get_order_status_history(self, order_id):
+        url = self.GET_ORDER_STATUS_HISTORY.format(orderId=order_id)
+        return self.request('GET', url)
+
     def get_medclients(self):
         url = self.GET_MEDCLIENTS
+        return self.request('GET', url)
+    
+    def get_medcenters(self):
+        url = self.GET_MEDCENTERS
+        return self.request('GET', url)
+    
+    def get_medcenter(self, contract_id):
+        url = self.GET_MEDCLIENT.format(contractID=contract_id)
         return self.request('GET', url)
 
     def get_subdivisions(self, med_client_id):
@@ -234,6 +250,6 @@ class Api:
         url = self.GET_HAZARDS
         return self.request('GET', url)
 
-    def get_conclusion_status(self):
-        url = self.GET_CONCLUSIONSTATUS
+    def get_hazards377(self):
+        url = self.GET_HAZARDS377
         return self.request('GET', url)
