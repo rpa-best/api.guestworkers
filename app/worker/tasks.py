@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 from oauth.utils import parse_fio
+from oauth.models import USER_TYPE_CANDIDATE
 from organization.models import Organization, UserToOrganization, STATUS_DONE, ROLE_WORKER, ROLE_OWNER, ROLE_CLIENT
 from organization.validators import inn_check_api_validator
 from .ftp import get_workers
@@ -69,4 +70,4 @@ def update_workers_from_onec():
             }, org=worker_org, user=user
         )
         passports.append(user.passport)
-    User.objects.exclude(Q(passport__in=passports) | Q(is_superuser=True) | Q(usertoorganization__role__in=[ROLE_OWNER, ROLE_CLIENT])).delete()
+    # User.objects.exclude(Q(passport__in=passports) | Q(is_superuser=True) | Q(usertoorganization__role__in=[ROLE_OWNER, ROLE_CLIENT]) | Q(type=USER_TYPE_CANDIDATE)).delete()

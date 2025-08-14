@@ -8,7 +8,7 @@ from core.utils.renderers import PandasExcelRenderer
 from organization.models import ROLE_OWNER, ROLE_CLIENT, UserToOrganization
 from organization.permissions import has_permission
 from organization.serializers import WorkerToOrganizationUpdateSerializer
-from oauth.models import User
+from oauth.models import User, USER_TYPE_WORKER
 from . import serializers, models, filters
 
 
@@ -65,6 +65,10 @@ class WorkerView(ModelViewSet):
         super().check_permissions(request)
         if self.action in ["create"] and not has_permission(None, request.user, [ROLE_OWNER, ROLE_CLIENT]):
             self.permission_denied(request)
+
+    def list(self, request, *args, **kwargs):
+        request.query_params.setdefault(type=USER_TYPE_WORKER)
+        return super().list(request, *args, **kwargs)
 
 
 class WorkerToUserUpdateView(ModelViewSet):

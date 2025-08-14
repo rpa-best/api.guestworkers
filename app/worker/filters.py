@@ -13,7 +13,7 @@ class WorkerFilter(filters.FilterSet):
 
     class Meta:
         model = get_user_model()
-        fields = ["org", "status_doc"]
+        fields = ["org", "status_doc", 'type']
 
     def filter_status_doc(self, queryset, name, value):
         now = timezone.now().date()

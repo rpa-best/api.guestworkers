@@ -17,6 +17,13 @@ from .validators import validate_phone
 
 CHANGE_PASSWORD_URL = "http://95.142.38.166:3050/new-password/"
 
+USER_TYPE_CANDIDATE = 'candidate'
+USER_TYPE_WORKER = 'worker'
+
+USER_TYPES = (
+    (USER_TYPE_WORKER, USER_TYPE_WORKER),
+    (USER_TYPE_CANDIDATE, USER_TYPE_CANDIDATE),
+)
 
 class UserManager(_UserManager):
 
@@ -69,6 +76,7 @@ class User(AbstractUser):
     phone = models.CharField(_("phone"), blank=True, null=True, validators=[validate_phone], max_length=255)
     surname = models.CharField(_("surname"), blank=True, null=True, max_length=255)
     passport = models.CharField(_('passport'), blank=True, null=True, max_length=255, unique=True)
+    type = models.CharField(max_length=255, choices=USER_TYPES, default=USER_TYPE_WORKER)
     username = None
 
     REQUIRED_FIELDS = []
