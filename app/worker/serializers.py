@@ -154,7 +154,7 @@ class WorkerListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["id", "first_name", "last_name", "surname", "docs"]
+        fields = ["id", "first_name", "last_name", "surname", "docs", "type"]
 
     @extend_schema_field(WorkerDocShowSerializer(many=True)) 
     def get_docs(self, obj: User):
@@ -167,7 +167,7 @@ class WorkerRetriveSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["id", "first_name", "last_name", "surname", "phone", "email", "docs", "orgs"]
+        fields = ["id", "first_name", "last_name", "surname", "phone", "email", "docs", "orgs", 'type']
 
     @extend_schema_field(WorkerDocShowSerializer(many=True)) 
     def get_docs(self, obj: User):
@@ -182,7 +182,7 @@ class WorkerUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["first_name", "last_name", "surname", "phone", "email"]
+        fields = ["first_name", "last_name", "surname", "phone", "email", "type"]
 
 
 class WorkerCreateSerializer(serializers.ModelSerializer):
@@ -193,7 +193,7 @@ class WorkerCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["first_name", "last_name", "surname", "phone", "email"]
+        fields = ["first_name", "last_name", "surname", "phone", "email", 'type']
 
     def create(self, validated_data):
         return User.objects.create_user(**validated_data, _send_email=validated_data.get("email"))
