@@ -11,11 +11,16 @@ class WorkerFilter(filters.FilterSet):
     org = filters.CharFilter("usertoorganization__org_id")
     status_doc = filters.ChoiceFilter(choices=DOC_STATUS, method="filter_status_doc")
     has_direction = filters.BooleanFilter(method='filter_has_direction')
-    type = filters.CharFilter(field_name="type", default=USER_TYPE_WORKER)
 
     class Meta:
         model = get_user_model()
         fields = ["org", "status_doc", 'type']
+
+    def __init__(self, data=None, *args, **kwargs):
+        data = data.copy() if data is not None else {}
+        if "type" not in data:
+            data["type"] = USER_TYPE_WORKER
+        super().__init__(data, *args, **kwargs)
 
     def filter_status_doc(self, queryset, name, value):
         now = timezone.now().date()
