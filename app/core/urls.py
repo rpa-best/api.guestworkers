@@ -31,6 +31,7 @@ urlpatterns = [
     path('api/worker/', include('worker.urls')),
     path('api/organization/', include('organization.urls')),
     path('api/mprofid/', include('mprofid.urls'), name='mprofid'),
+    path('api/bitrix/', include('bitrix.urls'), name='bitrix'),
     path('*', RedirectView.as_view(url="/admin/", permanent=False))
 ]
 
