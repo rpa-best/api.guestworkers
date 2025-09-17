@@ -10,6 +10,7 @@ from .serializers import WorkerInvoiceShowSerializer
 api = Api()
 
 
+@extend_schema_view(get=extend_schema(tags=['mprofid']))
 class InvoiceListView(ListAPIView):
     queryset = WorkerInvoice.objects.all()
     serializer_class = WorkerInvoiceShowSerializer
