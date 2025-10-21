@@ -2,10 +2,11 @@ from django.http import HttpResponse
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework.generics import ListCreateAPIView, RetrieveDestroyAPIView, RetrieveAPIView, ListAPIView
 from rest_framework.response import Response
+from oauth.models import User
 from .api import Api
 from .models import WorkerInvoice
 from .serializers import WorkerInvoiceShowSerializer
-
+from .filters import WorkerInvoiceFilter
 
 api = Api()
 
@@ -14,6 +15,12 @@ api = Api()
 class InvoiceListView(ListAPIView):
     queryset = WorkerInvoice.objects.all()
     serializer_class = WorkerInvoiceShowSerializer
+    filterset_class = WorkerInvoiceFilter
+
+    def get_queryset(self):
+        user = self.request.user
+        workers = User.objects.get_users(user).values_list("id", flat=True)
+        return WorkerInvoice.objects.filter(worker_id__in=workers)
 
 
 @extend_schema_view(post=extend_schema(tags=['mprofid']), get=extend_schema(tags=['mprofid']))
