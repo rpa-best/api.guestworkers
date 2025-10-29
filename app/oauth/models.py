@@ -76,6 +76,9 @@ class User(AbstractUser):
     phone = models.CharField(_("phone"), blank=True, null=True, validators=[validate_phone], max_length=255)
     surname = models.CharField(_("surname"), blank=True, null=True, max_length=255)
     passport = models.CharField(_('passport'), blank=True, null=True, max_length=255, unique=True)
+    birthday = models.DateField(blank=True, null=True, verbose_name=_("birthday"))
+    birth_place = models.CharField(_("birth place"), blank=True, null=True, max_length=255)
+    passport_date = models.DateField(blank=True, null=True, verbose_name=_("passport date"))
     type = models.CharField(max_length=255, choices=USER_TYPES, default=USER_TYPE_WORKER)
     username = None
 

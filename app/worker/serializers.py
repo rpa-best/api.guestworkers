@@ -186,17 +186,30 @@ class WorkerUpdateSerializer(serializers.ModelSerializer):
 
 
 class WorkerCreateSerializer(serializers.ModelSerializer):
+    inn = serializers.SlugRelatedField(
+        slug_field='inn', 
+        queryset=Organization.objects.exclude(usertoorganization__role=ROLE_WORKER), 
+        write_only=True,
+    )
+    email = serializers.EmailField(required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['inn'] = serializers.SlugRelatedField(slug_field='uuid', queryset=Organization.objects.exclude(usertoorganization__role=ROLE_WORKER).filter(usertoorganization__user=self.context["request"].user), write_only=True)
+        self.fields['inn'] = serializers.SlugRelatedField(
+            slug_field='inn', 
+            queryset=Organization.get_orgs(self.context["request"].user, True), 
+            write_only=True
+        )
 
     class Meta:
         model = User
-        fields = ["first_name", "last_name", "surname", "phone", "email", 'type']
+        fields = ["first_name", "last_name", "surname", "phone", "email", 'type', "birthday", "inn", "birth_place", "passport", "passport_date"]
 
     def create(self, validated_data):
-        return User.objects.create_user(**validated_data, _send_email=validated_data.get("email"))
+        org = validated_data.pop("inn")
+        user = User.objects.create_user(**validated_data)
+        UserToOrganization.objects.create(org=org, user=user, status=STATUS_DONE, role=ROLE_WORKER)
+        return user
 
 
 @extend_schema_serializer(exclude_fields=["user"])
