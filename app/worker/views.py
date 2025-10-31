@@ -3,6 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
+from rest_framework.decorators import action
 from rest_pandas.views import PandasView
 from core.utils.renderers import PandasExcelRenderer
 from organization.models import ROLE_OWNER, ROLE_CLIENT, UserToOrganization
@@ -59,12 +60,18 @@ class WorkerView(ModelViewSet):
             return serializers.WorkerUpdateSerializer
         elif self.action in ["create"]:
             return serializers.WorkerCreateSerializer
+        elif self.action in ["combine"]:
+            return serializers.WorkerCombineSerializer
         return serializers.WorkerRetriveSerializer
     
     def check_permissions(self, request):
         super().check_permissions(request)
         if self.action in ["create"] and not has_permission(None, request.user, [ROLE_OWNER, ROLE_CLIENT]):
             self.permission_denied(request)
+
+    @action(["post"], detail=True)
+    def combine(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
 
 
 class WorkerToUserUpdateView(ModelViewSet):

@@ -6,6 +6,7 @@ from rest_framework.exceptions import PermissionDenied
 from django.core.validators import FileExtensionValidator
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
+from mprofid.models import WorkerInvoice
 from organization.models import Organization, UserToOrganization, ROLE_WORKER, ROLE_CLIENT, ROLE_OWNER, STATUS_DONE, ROLES
 from organization.permissions import has_permission
 from organization.serializers import OrganizationShortSerializer, WorkerToOrganizationSerializer
@@ -183,6 +184,20 @@ class WorkerUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["first_name", "last_name", "surname", "phone", "email", "type"]
+
+
+class WorkerCombineSerializer(serializers.Serializer):
+    worker = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects,
+        write_only=True
+    )
+
+    def create(self, validated_data):
+        candidate_id = self.context['view'].kwargs.get('worker_id')
+        worker = validated_data.get('worker')
+        WorkerInvoice.objects.filter(worker_id=candidate_id).update(worker=worker)
+        User.objects.filter(id=candidate_id).delete()
+        return worker
 
 
 class WorkerCreateSerializer(serializers.ModelSerializer):
