@@ -30,7 +30,7 @@ class Organization(models.Model):
     
     @classmethod
     def get_orgs(cls, user, change=False):
-        if user.is_anonymous:
+        if user.is_anonymous or user.is_superuser:
             return cls.objects.all()
         orgs_id = []
         exclude_ids = []

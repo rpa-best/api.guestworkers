@@ -28,7 +28,7 @@ USER_TYPES = (
 class UserManager(_UserManager):
 
     def get_users(self, user, change=False):
-        if user.is_anonymous:
+        if user.is_anonymous or user.is_superuser:
             return self.all()
         users_id = []
         exclude_ids = [user.id]
