@@ -32,7 +32,7 @@ class ChooseMedClientWorkerForm(forms.ModelForm):
         self.request = request
         self.api = api
         super().__init__(*args, **kwargs)
-        medClientIds = api.get_medclients().json().get('medClient', [])
+        medClientIds = api.get_medclients().json().get('medclients', [])
         self.fields['medClientId'].choices = [
             [None, '---------'],
             *[(i['id'], f"{i['name']} ({i['id']})") for i in medClientIds]

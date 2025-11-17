@@ -17,7 +17,7 @@ class Api:
     GET_NEXT_ORDER = '/order/next'
     GET_ORDER_STATUS_HISTORY = '/order/statusHistory/{orderId}'
 
-    GET_MEDCLIENTS = '/medClients'
+    GET_MEDCLIENTS = '/medclients'
     GET_SUBDIVISIONS = '/subdivisions/{medclientId}'
     GET_PROFESSIONS = '/professions/{medclientId}'
 
