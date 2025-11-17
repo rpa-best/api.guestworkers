@@ -3,8 +3,12 @@ from django.contrib.auth.admin import UserAdmin as _UserAdmin
 from django.utils.translation import gettext_lazy as _
 from simple_history.admin import SimpleHistoryAdmin
 from organization.models import UserToOrganization
+from unfold.forms import AdminPasswordChangeForm, UserChangeForm, UserCreationForm
+from unfold.admin import ModelAdmin
+
 from worker.models import WorkerDoc
 from .models import User
+from .filters import OrganizationFilter
 
 admin.site.name = "Капитал кадри"
 admin.site.site_header = "Капитал кадри"
@@ -22,7 +26,10 @@ class UserToOrganizationInline(admin.TabularInline):
     verbose_name_plural = "Организации"
 
 @admin.register(User)
-class UserAdmin(SimpleHistoryAdmin, _UserAdmin):
+class UserAdmin(SimpleHistoryAdmin, _UserAdmin, ModelAdmin):
+    form = UserChangeForm
+    add_form = UserCreationForm
+    change_password_form = AdminPasswordChangeForm
     fieldsets = (
         (None, {"fields": ("email", "password")}),
         (_("Personal info"), {"fields": ("first_name", "last_name", "surname", "phone", "passport")}),
@@ -54,3 +61,4 @@ class UserAdmin(SimpleHistoryAdmin, _UserAdmin):
     inlines = [WorkerDocInline, UserToOrganizationInline]
     search_fields = User.autocomplete_search_fields()
     readonly_fields = ["date_joined", "last_login"]
+    list_filter = ["type", OrganizationFilter]

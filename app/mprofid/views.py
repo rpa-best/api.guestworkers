@@ -15,7 +15,7 @@ def dictionary_urls():
         "med": api.get_med,
         "status": api.get_status,
         "survey": api.get_survey,
-        "pay-types": api.get_paytypes,
+        "pay-types": api.get_pay_types,
         "hazards": api.get_hazards,
         "hazards377": api.get_hazards377,
     }

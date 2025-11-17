@@ -13,7 +13,9 @@ import os
 import datetime
 from pathlib import Path
 from dotenv import load_dotenv
-from .jet_conf import *
+from django.urls import reverse_lazy
+from django.templatetags.static import static
+
 load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -34,8 +36,12 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
-    'jet',
-    'jet.dashboard',
+    "unfold",  # before django.contrib.admin
+    "unfold.contrib.filters",  # optional, if special filters are needed
+    "unfold.contrib.forms",  # optional, if special form elements are needed
+    "unfold.contrib.inlines",  # optional, if special inlines are needed
+    "unfold.contrib.simple_history",
+
     'import_export',
     'rangefilter',
     'django.contrib.admin',
@@ -57,6 +63,7 @@ INSTALLED_APPS = [
     'worker',
     'mprofid',
     'bitrix',
+    "core",
 ]
 
 MIDDLEWARE = [
@@ -324,4 +331,102 @@ LOGGING = {
             "propagate": False,
         },
     },
+}
+
+
+UNFOLD = {
+    "SITE_TITLE": "Капитал кадры",
+    "SITE_HEADER": 'Капитал кадры',
+    "SITE_SUBHEADER": "Панель управления",
+    "SITE_URL": "/",
+    "SITE_ICON": {
+        "light": lambda request: static('/logo.png'),  # light mode
+        "dark": lambda request: static('/logo.png'),  # dark mode
+    },
+    "SITE_FAVICONS": [
+        {
+            "rel": "icon",
+            "sizes": "32x32",
+            "type": "image/jpg",
+            "href": lambda request: static('/logo.png'),
+        },
+    ],
+    "ENVIRONMENT": ["Development" , "info"] if DEBUG else ["Production" , "danger"], # environment name in header
+    # "DASHBOARD_CALLBACK": "core.views.dashboard_callback",
+    "LOGIN": {
+        "image": lambda request: static('/login-bg.png'),
+    },
+    "BORDER_RADIUS": "6px",
+    "COLORS": {
+        "base": {
+            "50": "249 250 251",
+            "100": "243 244 246",
+            "200": "229 231 235",
+            "300": "209 213 219",
+            "400": "156 163 175",
+            "500": "107 114 128",
+            "600": "75 85 99",
+            "700": "55 65 81",
+            "800": "31 41 55",
+            "900": "17 24 39",
+            "950": "3 7 18",
+        },
+        "primary": {
+            "50":  "236 254 255",  
+            "100": "207 250 254",
+            "200": "165 243 252",
+            "300": "103 232 249",
+            "400": "34 211 238",
+            "500": "6 182 212",     
+            "600": "8 145 178",
+            "700": "14 116 144",
+            "800": "21 94 117",
+            "900": "22 78 99",
+            "950": "8 51 68"   
+        },
+        "font": {
+            "subtle-light": "var(--color-base-500)",  # text-base-500
+            "subtle-dark": "var(--color-base-400)",  # text-base-400
+            "default-light": "var(--color-base-600)",  # text-base-600
+            "default-dark": "var(--color-base-300)",  # text-base-300
+            "important-light": "var(--color-base-900)",  # text-base-900
+            "important-dark": "var(--color-base-100)",  # text-base-100
+        },
+    },
+    "EXTENSIONS": {},
+    "SIDEBAR": {
+        "show_all_applications": lambda request: request.user.is_superuser,
+        "navigation": [
+            {
+                "title": "Главная",
+                "items": [
+                    {
+                        "title": "Компании",
+                        "icon": "domain",
+                        "link": reverse_lazy('admin:organization_organization_changelist'),
+                        'permission': lambda request: request.user.has_perm('organizations.view_organization'),
+                    },
+                    {
+                        'title': 'Сотрудники',
+                        'icon': 'people',
+                        'link': reverse_lazy('admin:oauth_user_changelist'),
+                        'permission': lambda request: request.user.has_perm('oauth.view_user'),
+                    },
+                ]
+            },
+            {
+                'title': 'Медицина',
+                'icon': 'medical_information',
+                'items': [
+                    {
+                        'title': 'Заявки сотрудников',
+                        'icon': 'medical_information',
+                        'link': reverse_lazy('admin:mprofid_workerinvoice_changelist'),
+                        'permission': lambda request: request.user.has_perm('mprofid.view_workerinvoice'),
+                    },
+                ]
+            }
+        ]
+    },
+    "TABS": [],
 }

@@ -9,9 +9,9 @@ PASSWORD = os.getenv("FTP_HOST_PASSWORD")
 
 def get_workers():
     with FTP(HOST, USER, PASSWORD) as ftp:
-        ftp.cwd('/httpdocs/upload/csv1c/back/')
+        ftp.cwd('/var/www/ftp/')
         # file_name = sorted(filter(lambda x: str(x).endswith('.csv'), ftp.nlst()), key=lambda x: ftp.voidcmd(f"MDTM {x}"))[-1]
-        file_name = 'sotrudniki.csv'
+        file_name = 'Личный кабинет бекэнд.csv'
         with io.BytesIO() as file:
             try:
                 ftp.retrbinary(f'RETR {file_name}', file.write)

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from simple_history.admin import SimpleHistoryAdmin
 from import_export.admin import ExportActionModelAdmin
-from jet.admin import CompactInline
+from unfold.admin import StackedInline, ModelAdmin
 from rangefilter.filters import (
     DateRangeQuickSelectListFilterBuilder,
 )
@@ -9,20 +9,22 @@ from .resources import OrganizationTabelResource
 from .models import Organization, UserToOrganization, OrganizationDoc, OrganizationTabel, Document, DocumentType
 
 
-class UserToOrganizationInline(CompactInline):
+class UserToOrganizationInline(StackedInline):
     extra = 0
     model = UserToOrganization
     show_change_link = True
     autocomplete_fields = ("user",)
+    tab = True
 
 
 class OrganizationDocInline(admin.TabularInline):
     model = OrganizationDoc
     extra = 0
+    tab = True
 
 
 @admin.register(Organization)
-class OrganizationAdmin(SimpleHistoryAdmin):
+class OrganizationAdmin(SimpleHistoryAdmin, ModelAdmin):
     list_display = ['name', 'inn']
     search_fields = ['name', 'inn']
     inlines = [UserToOrganizationInline, OrganizationDocInline]

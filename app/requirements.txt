@@ -28,3 +28,4 @@ channels-redis
 numpy==1.26.4
 django-admin-rangefilter
 django-import-export
+django-unfold
