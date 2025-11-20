@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework.generics import ListCreateAPIView, RetrieveDestroyAPIView, RetrieveAPIView, ListAPIView
 from rest_framework.response import Response
@@ -34,6 +35,14 @@ class InvoiceListCreateView(ListCreateAPIView):
 
     def create(self, request, *args, **kwargs):
         worker_id = self.kwargs.get('worker_id')
+        worker = get_object_or_404(User, id=worker_id)
+        request.data._mutable = True
+        request.data.update({
+            "fam": str(worker),
+            "passport": worker.passport,
+            "passportDate": worker.passport_date,
+            "birthday": worker.birthday
+        })
         response = api.post_order(request.data)
         if not response.ok:
             return Response({"detail": response.json(), "code": "api_error"}, status=403)

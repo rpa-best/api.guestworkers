@@ -33,7 +33,7 @@ class Api:
     GET_HAZARDS377 = '/dictionary/hazards377'
 
     def request(self, method, url, **kwargs):
-        header = { 'access-token': os.getenv('MPROFID_API_TOKEN') }
+        header = { 'access-token': "JASuoGmnk%JylAFD9s$Vzqrb0bZMY8" }
         return requests.request(method, self.base_url + url, headers=header, **kwargs)
 
     def get_order(self, order_id):

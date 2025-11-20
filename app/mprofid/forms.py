@@ -7,6 +7,7 @@ from unfold.widgets import (
     UnfoldAdminSplitDateTimeWidget
 )
 from core.widgets import ReadOnlyArrayWidget
+from oauth.models import User
 from .api import Api
 from .models import WorkerInvoice
 
@@ -46,12 +47,6 @@ class WorkerInvoiceCreateForm(forms.ModelForm):
         required=True,
         widget=UnfoldAdminSelectWidget()
     )
-    birthday = forms.DateField(
-        label="Дата рождения",
-        required=True,
-        widget=UnfoldAdminDateWidget()
-    )
-
     surveyTypeId = forms.ChoiceField(
         label="Вид осмотра",
         choices=[],
@@ -68,11 +63,6 @@ class WorkerInvoiceCreateForm(forms.ModelForm):
         label="Гражданство", 
         required=False,
         widget=UnfoldAdminTextInputWidget()
-    )
-    passportDate = forms.DateField(
-        label="Дата выдачи паспорта",
-        required=False,
-        widget=UnfoldAdminDateWidget()
     )
     passportPlace = forms.CharField(
         label="Место выдачи паспорта",
@@ -197,13 +187,13 @@ class WorkerInvoiceCreateForm(forms.ModelForm):
     def clean(self):
         data = self.serialized_cleaned_data
 
-        worker = data.pop('worker')
+        worker: User = data.pop('worker')
         passport = worker.passport
-        fam = worker.fio
 
-        data['fam'] = fam
+        data['fam'] = str(worker)
         data['passport'] = passport
-
+        data['passportDate'] = worker.passport_date
+        data['birthday'] = worker.birthday
         response = self.api.post_order(data)
 
         if not response.ok:
