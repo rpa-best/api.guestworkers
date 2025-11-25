@@ -39,8 +39,8 @@ class InvoiceListCreateView(ListCreateAPIView):
         request.data.update({
             "fam": str(worker),
             "passport": worker.passport,
-            "passportDate": worker.passport_date,
-            "birthday": worker.birthday
+            "passportDate": str(worker.passport_date),
+            "birthday": str(worker.birthday)
         })
         response = api.post_order(request.data)
         if not response.ok:
