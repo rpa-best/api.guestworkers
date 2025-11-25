@@ -36,7 +36,6 @@ class InvoiceListCreateView(ListCreateAPIView):
     def create(self, request, *args, **kwargs):
         worker_id = self.kwargs.get('worker_id')
         worker = get_object_or_404(User, id=worker_id)
-        request.data._mutable = True
         request.data.update({
             "fam": str(worker),
             "passport": worker.passport,
