@@ -24,6 +24,7 @@ services:
     command: celery -A core worker -l info
     volumes:
       - ./app/:/app/
+      - /var/www/ftp/:/app/ftp/
     restart: always
     env_file:
       - ./app/.env
@@ -34,6 +35,7 @@ services:
     command: celery -A core beat -l info
     volumes:
       - ./app/:/app/
+      - /var/www/ftp/:/app/ftp/
     restart: always
     env_file:
       - ./app/.env
