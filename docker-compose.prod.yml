@@ -12,6 +12,7 @@ services:
       - ./app/.env
     volumes:
       - ./app/:/app/
+      - /var/www/ftp/:/app/ftp/
 
   kk_redis:
     container_name: kk_redis
